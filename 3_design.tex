@@ -1,0 +1,51 @@
+\section{Design}
+
+The overall goal of sub-project A3 in \phase{3} is to enable cooperative transitions with non-transition-capable communication systems in order to be able to integrate them into the MAKI ecosystem to increase the overall benefit. 
+To achieve this goal, the \emph{migration of mechanisms} in per se non-transition-capable communication systems is enabled on the one hand, and the concept of \emph{deformable transitions} is developed on the other hand, 
+which can be used in non-transition-capable communication systems under changing and partly restricted decision bases with different existing mechanisms.
+
+In the following, the approaches of migration of mechanisms and deformable transitions are illustrated using the example of terminals with Multi Radio Access Technology (Multi-RAT).
+Today's mobile terminals use a variety of technologies for network access.
+In addition to classic technologies such as WLAN and LTE, multi-RATs are becoming the standard in mobile communication in the context of 5G. 
+At the same time, these multi-RATs can so far only be used within the scope of the functionality implemented in the technology and do not allow fine-grained user control over the parameters of the lower layers.
+From A3's point of view, it is desirable not only to combine the standard technologies advantageously, as can be done by multipath transport protocols, but also to adapt the individual RATs at runtime through targeted modification at the lower layers in such a way that the cooperation between the RATs is further optimised. 
+For example, some RATs can no longer be used sensibly if, due to harsh framework conditions, an excessively high packet error rate occurs even with robust coding and modulation procedures. A solution approach for this could be:
+\begin{itemizeInline}
+\item the combination of several RATs with dynamic splitting of data between the RATs,
+\item splitting data packets into smaller units to maximise their reliable transmission, and 
+\item the use of customised error correction procedures across all RATs to ensure e.g. mission critical requirements.
+\end{itemizeInline}
+In order to make the aforementioned adaptations also on non-transit-enabled terminals, it is necessary to migrate novel functionality to existing terminals, for example by implanting an error correction mechanism that covers all RATs simultaneously, or configuring a RAT also outside the configuration predefined by the equipment provider. 
+
+
+Transitions between the different network access technologies are generally necessary for various reasons, such as the movement of users, changes in the situation (e.g. weather, congregation of people, economic reasons) or for technical reasons, e.g. because one or more network access technologies -- as in the example above -- are suddenly only able to function to a limited extent due to malfunctions. A malleable transition can use alternative sources of information, e.g. about the movement of users (e.g. pedometer on foot, speedometer in a car, GPS) and mechanism-specific information (e.g. connection quality, maximum throughput, current and historical load) to perform adapted transitions between mechanisms. 
+When used in a communication system, the deformable transition is bound to concrete information sources and thus deformed for the concrete use case.
+For example, in a vehicle, the speedometer and abstract connection information of WLAN, LTE as well as mmWave Car2Car technology can be used to predict transitions between connections and switch them proactively. 
+The same transition (with the same transition logic) -- but deformed in a different way -- can be used in a user's mobile device to implement 5G multi-RAT transitions, although the mechanisms and information sources may differ. 
+
+% Grafik: Architektur und Big Picture
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\linewidth]{\teilprojektDir/MAKI___Teilprojekt_A3_Uebersicht.pdf}
+    \caption{Mechanismenmigration und verformbare Transitionen zur Umsetzung kooperativer Transitionen mit nicht-transitionsfähigen Kommunikationssystemen.}
+    \label{fig:bigpicture}
+\end{figure}
+
+Figure~\ref{fig:bigpicture} shows the interaction of \emph{mechanism migration} with \textit{deformable transitions}.
+The non-transitionable communication system uses mechanism $A$ to fulfil its functionality.
+The mechanisms $B'$ and $C'$ are migrated into the non-transition-capable communication system, i.e. the mechanism $B'$ is made usable for the system e.g. by pre-positioning (e.g. by a proxy, illustrated by the filled grey diamond), and  
+the mechanism $C'$ is made accessible to the system e.g. by modifying the system (e.g. by changing a library used, illustrated by the filled grey circle).
+A deformable transition can be used under different conditions, e.g. a reduced choice of mechanisms or a limited basis for decision-making (e.g. missing information from the non-transitionable communication system; indicated by the X in the arrow of the data flow to the deformable transition); the transition logic remains intact. 
+The transition can be automatically deformed by pre-processing alternative information sources (indicated by the operators to the left and right of the transition logic) to be usable under given conditions. 
+
+Mechanism migration is not limited to the area of communication, but can also be used in the other areas of computation and data storage.
+A photo application can serve as an example of mechanism migration in computation.
+The application stores captured images in a predefined format that can be replaced by another format by means of mechanism migration in order to enable more efficient storage utilisation, for example through new compression techniques. 
+Conceivable extensions for this example are the outsourcing of calculations to special hardware (integrated FPGAs) or edge services.
+An illustrative example of the migration of a memory mechanism is a hybrid semi-volatile memory that accelerates read access times by orders of magnitude and thus improves the quality of service of a programme. 
+In addition, intelligent caching mechanisms can be migrated in combination with network resources so that a high quality of service is achieved even with poor network access. 
+
+In order to use cooperative transitions together with a non-transitionable communication system, this communication system must either be modified (e.g. by implanting code) or indirectly equipped with new functionalities by pre-positioning additional functional units. 
+By using deformable transitions with the help of data-driven approaches in communication systems with other decision bases and mechanisms, the automated construction of transition logics is supported. 
+The transition logic is viewed as a self-contained module that has fixed interfaces for inputting decision bases and outputting transition decisions.
+The interfaces can be assigned various information sources in a deformable transition, which are adapted in preprocessing by means of simple logical and arithmetic operations, as well as by means of more complex data-driven algorithms.
