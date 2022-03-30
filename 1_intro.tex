@@ -1,11 +1,17 @@
 \section{Introduction}
+\label{sec:intro}
 
 The protocols used in networks today have been standardised over a long period of time and implemented in operating systems and devices.
 Much of the internet traffic is based on the TCP protocol \cite{A3:john2007analysis}, which is standardised by the IETF and extended with new parts as needed. 
-However, integrating new functions into existing protocols is very time-consuming and subject to a lengthy process \cite{A3:de2019pluginizing}. 
+However, integrating new functionality into existing protocols is very time-consuming and subject to a lengthy process \cite{A3:de2019pluginizing}. 
 For example, an approach has been presented in the literature that adds network coding to TCP \cite{A3:sundararajan2011network}. 
 These changes are only applicable if the implementation is widely used and both sender and receiver have this extension. 
-This creates a fundamental problem: users who switch to a new standard or extensions early on have hardly any advantages of their own at the beginning, but without advantages of their own, hardly any users will switch.
+Another way would be to publish a new protocol with the new functionality instead of extend a existing protocol, but the problem remains the same. 
+This creates a fundamental problem: vendor who switch to a new standard or extensions early on have hardly any advantages of their own at the beginning, but without advantages of their own, hardly any vendor will switch.
 This means that it takes longer to achieve a certain spread in the market, as a certain critical mass of users must be exceeded. 
 This makes the introduction of extensions even more difficult.
-In order to achieve the transition capability of communication systems propagated by MAKI in practice, transitions must therefore be usable on as many devices as possible. Protocols and mechanisms must be designed to be extensible across all layers. 
+In order to achieve the transition capability of communication systems in practice, transitions must therefore be usable on as many devices as possible.
+To maximize the benefit for early adopters a method to get new functionality to legacy devices called  "mechanisms migration" seems to be promising.
+On the one hand a mechanism migration on the operating-system-level could be a good way to break the innovation blocking point of gaining nearly no benefits for the vendor, by integrating new functionality to legacy apps and supporting new functionality os wide.
+On the other hand the network itself could wrap non-changeable legacy devices to virtually bring new functionality to this devices to support a wide range of them and enable an easy way of bringing new technology much faster to legacy devices and spread new technology. 
+

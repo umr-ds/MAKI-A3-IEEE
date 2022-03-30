@@ -1,51 +1,115 @@
-\section{Design}
+\section{Concept}
+\label{sec:design}
 
-The overall goal of sub-project A3 in \phase{3} is to enable cooperative transitions with non-transition-capable communication systems in order to be able to integrate them into the MAKI ecosystem to increase the overall benefit. 
-To achieve this goal, the \emph{migration of mechanisms} in per se non-transition-capable communication systems is enabled on the one hand, and the concept of \emph{deformable transitions} is developed on the other hand, 
-which can be used in non-transition-capable communication systems under changing and partly restricted decision bases with different existing mechanisms.
 
-In the following, the approaches of migration of mechanisms and deformable transitions are illustrated using the example of terminals with Multi Radio Access Technology (Multi-RAT).
-Today's mobile terminals use a variety of technologies for network access.
-In addition to classic technologies such as WLAN and LTE, multi-RATs are becoming the standard in mobile communication in the context of 5G. 
+
+
+
+
+TODO:
+Rings
+sysname
+outer: environment
+inner: system
+interfaces between rings
+mechanism
+
+
+
+
+
+
+
+
+\paragraph{Mechanism}
+
+We use the definition of \cite{} for Mechanisms: "A mechanism is a confined conceptual element of a networked system that is bound to a realization as cooperating functional units; the special case of an isolated realization (single-node) is permitted."
+
+Examples of such mechanisms are manifold and span all protocol- and system-layers, as the following selection of possible mechanisms shows:
+
+\begin{itemize}
+ \item Complete protocols: TCP, UDP, RTP, overlays, etc.
+ \item Fine-grained protocol mechanisms: congestion control, fragmentation, load balancing, replication, etc.
+ \item Network concepts: infrastructure-based, ad-hoc, partially meshed, delay tolerant (DTN), etc.
+ \item Network technologies: Ethernet, LTE, IEEE 802.11, Bluetooth, etc.
+ \item Security mechanisms: encryption, integrity protection, authentication, etc.
+ \item System components: positioning (via WLAN, GSM or GPS), sensors, etc.
+\end{itemize}
+
+\subsection{Concept}
+\label{sec:design:concept}
+
+Any communication between different parties relies on one or many \textit{communication interfaces}.
+Such an interface can be anything from set of rules governing the actual communication, such as protocols defined on the different layers of the network-stack-model, to implicit assumptions over the inner workings of peers in a network.
+While the network stack itself already offers plenty of possibilities to intervene and modify a node's behavior, via the use of a \textit{network shim}, extending this line of thought to include the entirety of a node's behavior allows for novel approaches to the problem of communication adjustments.
+
+The advantage of such a holisitc approach to communication behavior can be seen in the fact, that it allows us to also alter behavior of network participant which are incapable or unwilling to modify their own operation.
+This could be due to a network participant being built upon a proprietary frameworks, which disallows the modification of the device after sale, or simply due to the manufacturer dropping support.
+In such a case we are unable to modify the node itself, but we may still be capable of modifying its environment to enforce the desired adaption in its behavior.
+
+This change can be thought of as an ''outer'' level of the communication infrastructure enveloping an ''innter'' level and thus forcing a change.
+When faced with a closed application, we might modify the operating system to force the applications behavior to change by, for example, modifying the network stack to transparently wrap connection in a VPN.
+
+If the whole device is unmodifiable, but the network is under our control, then we may utilize the network  to force the device to behave in a certain way, e.g. by placing gateway-servers inside  the network who can transparently alter traffic flows.
+
+If even the network is outside our control, then we may still affect change by modifying, or replacing the communication partner/backend with which the device is communicating.
+By knowing the communication protocols and crafting messages in such a way that will trigger certain behavior in the device.
+
+In addition to classic wireless technologies such as WLAN and LTE, multi-RATs are becoming the standard in mobile communication in the context of 5G. 
 At the same time, these multi-RATs can so far only be used within the scope of the functionality implemented in the technology and do not allow fine-grained user control over the parameters of the lower layers.
-From A3's point of view, it is desirable not only to combine the standard technologies advantageously, as can be done by multipath transport protocols, but also to adapt the individual RATs at runtime through targeted modification at the lower layers in such a way that the cooperation between the RATs is further optimised. 
-For example, some RATs can no longer be used sensibly if, due to harsh framework conditions, an excessively high packet error rate occurs even with robust coding and modulation procedures. A solution approach for this could be:
-\begin{itemizeInline}
+It is desirable not only to combine the standard technologies advantageously, as can be done by multipath transport protocols, but also to adapt the individual RATs at runtime through targeted modification at the lower layers in such a way that the cooperation between the RATs is further optimised. 
+For example, some RATs can no longer be used sensibly if, due to harsh environmental conditions, an excessively high packet error rate occurs even with robust coding and modulation procedures. A solution approach for this could be:
+\begin{itemize}
 \item the combination of several RATs with dynamic splitting of data between the RATs,
 \item splitting data packets into smaller units to maximise their reliable transmission, and 
 \item the use of customised error correction procedures across all RATs to ensure e.g. mission critical requirements.
-\end{itemizeInline}
-In order to make the aforementioned adaptations also on non-transit-enabled terminals, it is necessary to migrate novel functionality to existing terminals, for example by implanting an error correction mechanism that covers all RATs simultaneously, or configuring a RAT also outside the configuration predefined by the equipment provider. 
+\end{itemize}
+
+In order to make the aforementioned adaptations also on legacy devices, it is necessary to migrate novel functionality to existing devices, for example by implanting an error correction mechanism that covers all RATs simultaneously, or configuring a RAT also outside the configuration predefined by the equipment provider. 
+
+\paragraph{OS-side Adaption}
+
+From the OS view the possible 
+
+\paragraph{Network-side Adaption}
+
+From the network point of view a legacy device can be handled as blackbox and arriving data can be interpreted as byte string which can be eg. split and send over different RATs. 
+All additional concepts and improvements like custom error correction could also be applied on lower layer. 
+This is the easiest way for a conceptional view of the data transmission and offers many possibilities of improvements.
+But two possibilities exist:
+1. The backend or target of the communication understands this change, then it can be easily done by the enveloping network
+2. The backend or target of the communication is as legacy as the enveloped system, then the backend must also be encapsulated by an envelopment and the operations must be reversed.  
+
+Alternatively, if the specific communication protocol used by the legacy device is known, the network can influence the device's operation by crafting packets which trigger changes in legacy device behaviour.
+
+In a scenario, which includes both transition-enabled, and legacy devices, this enables the network-controller to orchestrate the legacy device's behaviour in such a way, the allows for smooth operation of such a heterogeneous network.
+For example, the network could strategically drop packets, modify flow-control header fields or restrict bandwidth to ensure that a legacy device does not attempt to utilise more network bandwidth that would be appropriate.
+
+Furthermore, when the device's internal behaviour depends directly on received packets, for example if the device receives commands via the network, then these packets can be crafted in such a way, that limit traffic generation on the device itself.
+In section \ref{sec:implementation:treetalker}, we will go into a concrete example for the approach, which involves a distributed sensor-network connected by the low bandwidth LoRa wireless-communication standard.
+
+%\subsection{Concept}
+%\label{sec:design:concept}
+
+%\paragraph{OS-side}
+
+%Design graph for OS-side concept
+%+ description of the concept from this point of view
+
+%\paragraph{Network-side}
+
+%Design graph for Network-side concept
+%+ description of the concept from this point of view
+
+%%\paragraph{Holistic Concept}
+
+%Merging both concepts results in a general approach and in the concept of mechanism migration to legacy devices.
 
 
-Transitions between the different network access technologies are generally necessary for various reasons, such as the movement of users, changes in the situation (e.g. weather, congregation of people, economic reasons) or for technical reasons, e.g. because one or more network access technologies -- as in the example above -- are suddenly only able to function to a limited extent due to malfunctions. A malleable transition can use alternative sources of information, e.g. about the movement of users (e.g. pedometer on foot, speedometer in a car, GPS) and mechanism-specific information (e.g. connection quality, maximum throughput, current and historical load) to perform adapted transitions between mechanisms. 
-When used in a communication system, the deformable transition is bound to concrete information sources and thus deformed for the concrete use case.
-For example, in a vehicle, the speedometer and abstract connection information of WLAN, LTE as well as mmWave Car2Car technology can be used to predict transitions between connections and switch them proactively. 
-The same transition (with the same transition logic) -- but deformed in a different way -- can be used in a user's mobile device to implement 5G multi-RAT transitions, although the mechanisms and information sources may differ. 
-
-% Grafik: Architektur und Big Picture
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=.8\linewidth]{\teilprojektDir/MAKI___Teilprojekt_A3_Uebersicht.pdf}
-    \caption{Mechanismenmigration und verformbare Transitionen zur Umsetzung kooperativer Transitionen mit nicht-transitionsfähigen Kommunikationssystemen.}
+    \includegraphics[width=.8\linewidth]{figures/MechanismMigration.pdf}
+    \caption{Mechanism migration to a legacy device with transition-enabled environment}
     \label{fig:bigpicture}
 \end{figure}
 
-Figure~\ref{fig:bigpicture} shows the interaction of \emph{mechanism migration} with \textit{deformable transitions}.
-The non-transitionable communication system uses mechanism $A$ to fulfil its functionality.
-The mechanisms $B'$ and $C'$ are migrated into the non-transition-capable communication system, i.e. the mechanism $B'$ is made usable for the system e.g. by pre-positioning (e.g. by a proxy, illustrated by the filled grey diamond), and  
-the mechanism $C'$ is made accessible to the system e.g. by modifying the system (e.g. by changing a library used, illustrated by the filled grey circle).
-A deformable transition can be used under different conditions, e.g. a reduced choice of mechanisms or a limited basis for decision-making (e.g. missing information from the non-transitionable communication system; indicated by the X in the arrow of the data flow to the deformable transition); the transition logic remains intact. 
-The transition can be automatically deformed by pre-processing alternative information sources (indicated by the operators to the left and right of the transition logic) to be usable under given conditions. 
-
-Mechanism migration is not limited to the area of communication, but can also be used in the other areas of computation and data storage.
-A photo application can serve as an example of mechanism migration in computation.
-The application stores captured images in a predefined format that can be replaced by another format by means of mechanism migration in order to enable more efficient storage utilisation, for example through new compression techniques. 
-Conceivable extensions for this example are the outsourcing of calculations to special hardware (integrated FPGAs) or edge services.
-An illustrative example of the migration of a memory mechanism is a hybrid semi-volatile memory that accelerates read access times by orders of magnitude and thus improves the quality of service of a programme. 
-In addition, intelligent caching mechanisms can be migrated in combination with network resources so that a high quality of service is achieved even with poor network access. 
-
-In order to use cooperative transitions together with a non-transitionable communication system, this communication system must either be modified (e.g. by implanting code) or indirectly equipped with new functionalities by pre-positioning additional functional units. 
-By using deformable transitions with the help of data-driven approaches in communication systems with other decision bases and mechanisms, the automated construction of transition logics is supported. 
-The transition logic is viewed as a self-contained module that has fixed interfaces for inputting decision bases and outputting transition decisions.
-The interfaces can be assigned various information sources in a deformable transition, which are adapted in preprocessing by means of simple logical and arithmetic operations, as well as by means of more complex data-driven algorithms.

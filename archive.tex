@@ -1,0 +1,21 @@
+Figure~\ref{fig:bigpicture} shows the interaction of \emph{mechanism migration} with \textit{deformable transitions}.
+
+
+
+The non-transitionable communication system uses mechanism $A$ to fulfil its functionality.
+The mechanisms $B'$ and $C'$ are migrated into the non-transition-capable communication system, i.e. the mechanism $B'$ is made usable for the system e.g. by pre-positioning (e.g. by a proxy, illustrated by the filled grey diamond), and  
+the mechanism $C'$ is made accessible to the system e.g. by modifying the system (e.g. by changing a library used, illustrated by the filled grey circle).
+A deformable transition can be used under different conditions, e.g. a reduced choice of mechanisms or a limited basis for decision-making (e.g. missing information from the non-transitionable communication system; indicated by the X in the arrow of the data flow to the deformable transition); the transition logic remains intact. 
+The transition can be automatically deformed by pre-processing alternative information sources (indicated by the operators to the left and right of the transition logic) to be usable under given conditions. 
+
+Mechanism migration is not limited to the area of communication, but can also be used in the other areas of computation and data storage.
+A photo application can serve as an example of mechanism migration in computation.
+The application stores captured images in a predefined format that can be replaced by another format by means of mechanism migration in order to enable more efficient storage utilisation, for example through new compression techniques. 
+Conceivable extensions for this example are the outsourcing of calculations to special hardware (integrated FPGAs) or edge services.
+An illustrative example of the migration of a memory mechanism is a hybrid semi-volatile memory that accelerates read access times by orders of magnitude and thus improves the quality of service of a programme. 
+In addition, intelligent caching mechanisms can be migrated in combination with network resources so that a high quality of service is achieved even with poor network access. 
+
+In order to use cooperative transitions together with a non-transitionable communication system, this communication system must either be modified (e.g. by implanting code) or indirectly equipped with new functionalities by pre-positioning additional functional units. 
+By using deformable transitions with the help of data-driven approaches in communication systems with other decision bases and mechanisms, the automated construction of transition logics is supported. 
+The transition logic is viewed as a self-contained module that has fixed interfaces for inputting decision bases and outputting transition decisions.
+The interfaces can be assigned various information sources in a deformable transition, which are adapted in preprocessing by means of simple logical and arithmetic operations, as well as by means of more complex data-driven algorithms.

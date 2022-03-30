@@ -1,0 +1,12 @@
+\section{\ttt}
+\label{sec:treetalker}
+
+To demonstrate the power of the network-side adaption, we decided to adapt a legacy-device which has been in real-world use for some time.
+We decided on the ''Treetalker'' platform\footnote{\url{https://www.nature4shop.com/}}, which is a product for distributed tree-health monitoring.
+This platform has been in use in many areas in the world for example in Moscow city with 250 TreeTalkers or a cooperation with the Peking University. \footnote{https://www.nature4shop.com/our-vision/}
+
+The platform vendor sells both the sensor-devices (henceforth simply called \textit{Treetalker}), as well as a basestation (henceforth called \textit{TTCloud}), which can be used to aggregate data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
+The ''Treetalker''-platform is proprietary, and does not give buyers access to the device firmware.
+
+For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{Treetalkers}.
+We call the resulting system \ttt.
