@@ -5,7 +5,7 @@ This section introduces the concept of \mm and the components required to achiev
 
 \subsection{Rings}
 Modern information and communications technology consists of a multitude of components like access devices (smartphones, computers, etc.) and network infrastructure (routers, back-bone network), software (e.g., operating systems, middle-ware, applications), networks, network topologies, network protocols on various layers, compute facilities (cloud, edge, etc.) and so on.
-To give order to the overall design, these components can be arranged in a domain-specific ring structure, as shown in Fig.TODO, where each ring represents a component required for the given domain.
+To give order to the overall design, these components can be arranged in a domain-specific ring structure, as shown in Fig.TODO, where each \emph{ring} represents a component required for the given domain.
 The most specific component for the given domain forms the center of the structure and components are added as rings.
 As an example, a system providing a VoIP service to users, the telephony application would form the center.
 This application requires the operating system and its networking APIs, which represents the ring around the application, whereas the next outer ring represents the local area network.
@@ -13,13 +13,15 @@ This categorization allows arbitrary deep rings that seem appropriate for the gi
 In the above example, the outer most ring would be the backend executed on a server in the cloud.
 
 
-\subsection{Interrings}
+\subsubsection{Interrings}
 Between every ring, the components require interaction.
 In the above example, the telephony application uses the operating system's networking API to send and receive data.
-The OS 
+Thereon, the OS uses for example Wi-Fi or cellular connectivity to access the local area network, and so on.
+These interaction layers are called \emph{interrings}.
 
 TODO:
-sysname
+\mm
+\env
 outer: environment
 inner: system
 mechanism
@@ -118,7 +120,7 @@ In section \ref{sec:implementation:treetalker}, we will go into a concrete examp
 
 \begin{figure}
     \centering
-    \includegraphics[width=.8\linewidth]{figures/MechanismMigration.pdf}
+    \includegraphics[width=\linewidth]{figures/MechanismMigration.pdf}
     \caption{Mechanism migration to a legacy device with transition-enabled environment}
     \label{fig:bigpicture}
 \end{figure}
