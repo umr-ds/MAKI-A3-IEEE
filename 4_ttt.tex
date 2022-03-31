@@ -33,8 +33,13 @@ For this reason, there is also no way for a Treetalker-network to coexist with o
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the treetalker-network.
 
-\subsection{System Design}
+\subsection{General Design}
 \label{sec:treetalker:design}
 
-Based on the ring-model described in section \ref{\label{sec:design}}, this scenario can be expressed as a 3-ring design.
-The innermost ring, the Treetalker's firmware is unaccessible to us
+Based on the ring-model described in section \ref{sec:design}, this scenario can be expressed as a 3-ring design.
+The innermost ring, the Treetalker's \textit{firmware} is unaccessible to us, as are the next two, the \textit{hardware} ring and the \textit{link} ring.
+This is all due to the Treetalker-platform being a proprietary black-box, and using an equally closed-source LoRa-module for communication.
+It is therefore only at layer 4, the \textit{network} itself, where we can attach ourselves.
+The particular \mm we are applying, rather than the insertion of an interring, or modification of an existing ring, is the wholesale replacement of this fourth ring with our own hardware.
+
+Our network architecture employs two separate decision making instances, one is located on the physical device located in the forest which communicates directly with the Treetalker
