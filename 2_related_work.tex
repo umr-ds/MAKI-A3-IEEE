@@ -1,66 +1,38 @@
 \section{Related Work}
+The challenge of applying novel protocols and mechanisms to existing systems is discussed in different ways in the literature. 
+In particular, the two areas of inherent extensibility of network protocols, and userspace network protocol implementations are relevant in this area and hence are discussed in this chapter. 
 
-
-
-
-\paragraph{Inherent extensibility of protocols}
-There are various approaches to creating inherent extensibility of protocols.
+% \paragraph{Inherent Extensibility of Network Protocols}
 Foundations for making network protocols extensible and updatable lie in the active networks research branch \cite{A3:tennenhouse1996towards, A3:tennenhouse1997survey}.
 ANTS \cite{A3:wetherall1998ants} provides a system architecture that enables new protocols to be deployed on routers as well as terminals through platform-independent code.
-Furthermore, a mechanism was presented in the literature that allows new transport protocols to be deployed easily and quickly \cite{A3:patel2003upgrading}. The protocols are exchanged between two communication partners, selected at the beginning of a connection and executed in the kernel.
-An additional obstacle in the dissemination of new protocols lies in their use by applications. 
+Furthermore, a mechanism was presented in the literature that allows new transport protocols to be deployed easily and quickly \cite{A3:patel2003upgrading}. 
+The protocols are exchanged between two communication partners, selected at the beginning of a connection and executed in the kernel.
 For example, Pathak et al. \cite{A3:pathak2015modnet} present a system that provides applications with additional TCP interfaces and makes TCP adaptable in a fine-grained way, but has hardly been used by applications so far.
 With software-defined networks \cite{A3:mckeown2008openflow} and the network programming language P4 \cite{A3:bosshart2014p4}, network programmability was achieved. 
-In particular, in the approaches described, the network devices used by providers and service providers become extensible.
 Tran et al.~\cite{A3:tran2019beyond} present a method to add functionality to TCP kernel implementation using eBPF. 
 As examples, the subsequent implementation of the user timeout option, as well as the dynamic change of the TCP congestion control mechanism are investigated.
 QUIC is an alternative to TCP brought forth first by Google and then by the IETF, but is intended to be advanced in a similar manner to TCP.
-De Coninck et al.~\cite{A3:de2019pluginizing,A3:de2018tuning} present a method to dynamically tune QUIC on a per-connection basis through extensions. In order to make the QUIC extensions platform-independent, they are executed in a virtual machine.
+De Coninck et al.~\cite{A3:de2019pluginizing,A3:de2018tuning} present a method to dynamically tune QUIC on a per-connection basis through extensions. 
 The presented approaches can be used by actively adapting existing systems and then enable the extensibility of these systems.
 
+% In summary, the current state of research still lacks strategies that provide for the inherent extensibility of new protocols and mechanisms -- even for domains where continuous evolution has been shown to occur in recent years. 
+% In addition, proprietary system components make it difficult to easily exchange mechanisms on common end devices. 
 
-In summary, the current state of research still lacks strategies that provide for the inherent extensibility of new protocols and mechanisms -- even for domains where continuous evolution has been shown to occur in recent years. In addition, proprietary system components make it difficult to easily exchange mechanisms on common end devices. Subproject A3 aims to introduce new mechanisms into previously non-transitionable communication systems, thus enabling long-term evolution of communication systslackems.
 
-
-\paragraph{Network protocols in userspace}
+% \paragraph{Userspace Network Protocol Implementations}
 Network stacks are usually implemented in the operating system kernel for efficiency reasons, and existing applications use this kernel implementation. 
-To introduce new functionality, it must be implemented in the kernel and adapted to the operating systems in which this functionality is to be supported.
 However, network protocols can also be implemented independently of the kernel to allow faster development rates and wider distribution. 
 Alpine introduces an alternative network stack in which changes can be implemented and tested quickly \cite{A3:ely2001alpine}.
 MultiStack \cite{A3:honda2014rekindling} is a userspace implementation of a network stack framework that can provide isolated network stacks for different applications and enables rapid extensibility. 
 An implementation of TCP in userspace is presented by Jeong et al \cite{A3:jeong2014mtcp}.
-By executing in multiple threads, it is possible to achieve orders of magnitude higher bandwidth on multi-core machines, but only after the application has been adapted to the implementation.
+By executing in multiple threads, it is possible to achieve orders of magnitude higher bandwidth on multi-core machines.
 With NUSE, the network stack of the Linux kernel can be used and further developed as a userspace library \cite{A3:tazaki2015library}. 
 Existing programs can thus use modified protocols without modifications to the program itself.
 Heuschkel et al.~\cite{A3:heuschkel2016virtualstack} present VirtualStack, which allows different userspace network stacks to be used on one system. 
 In these network stacks, extensions as well as new protocols can be implemented and used quickly, and applications can benefit from the protocol changes in the virtual stack without adjustments. 
-Especially in cloud applications, decoupling the network stack from the operating system can lead to better adaptability~\cite{A3:niu2017network}.
 ClickNF \cite{A3:gallo2018clicknf} is an extension of a software-defined router in which the lower four layers of the network stack can be exchanged in a modular way. 
-Extensions of existing protocols, such as TCP, can thus be implemented quickly and easily.
 In order to adapt network protocols and the network stack, a system has been presented in the literature with the help of which the network stack can be detached from virtual machines (VM) and centrally managed on the host operating system and made available to the various VMs \cite{A3:niu2019netkernel}. 
 SocksDirect \cite{A3:li2019socksdirect} offers the possibility for efficient socket-based communication via local networks. 
-Here, a socket system was developed that is completely compatible with Linux sockets and can thus be used for them. 
-This requires remote direct memory access between the communication partners in each case. 
-The network stack of the operating system is replaced by its own user space implementation without having to adapt the applications. 
-Furthermore, a method has been presented in the literature with which energy can be saved on smartphones by shifting parts of the processing of the network stack from the terminals to wireless base stations.
-This can save cycles of CPU calculations and thus energy \cite{A3:zhu2016trimming}. 
 
-In summary, it can be stated that despite a high number of related approaches for processing network protocols in user space, the corresponding solutions have not made broad inroads into existing communication systems. There, optimised kernel implementations of the protocols continue to dominate, which are difficult to modify adaptively. Sub-project A3 aims to demonstrate the feasibility of system modifications beyond the user space in principle and to do this, work with pre-positioning of functions and modifications of system components at runtime.
+% In summary, it can be stated that despite a high number of related approaches for processing network protocols in user space, the corresponding solutions have not made broad inroads into existing communication systems. 
 
-
-
-\paragraph{Software-defined wireless networks and modification of wireless communication in existing terminals}
-The paradigm of software-defined radio (SDR) promises the highest flexibility in the modification of wireless communication, but to date it is predominantly limited to development platforms and is virtually unheard of in current end devices. Comparably, the approach of Cognitive Radio (CR) considers extensive reconfiguration possibilities of wireless communication with the focus on flexible spectrum use, but also requires specialised end devices. The complete functionality of SDR and CR on terminal systems would be a desirable building block for future, widely programmable communication systems. Today's reality, however, shows that commercially available terminals do not provide for corresponding modification possibilities. 
-
-In recent years, more work on software-defined networks \cite{A3:Kreutz:2015, A3:Monsanto2013} has also been conceived beyond the programmability of the core wired network and extended to wireless communication systems \cite{A3:Bernados:WirelessCommunication, A3:Jagadeesan:2014}. Application-driven SDN-based approaches such as PANE (Participatory Networking) \cite{A3:Ferguson2013}, which served as a model for A3's work in Phase 2, assume that the end devices are completely modifiable. Qadir et al. \cite{A3:Qadir2014} give an overview of programmable wireless networks. Solutions related to subproject A3 in this area include OpenRadio (for configuring various wireless parameters) and OpenRF (for advanced MIMO signal processing with WLAN cards), in which a modification of existing terminal components was made for specialised tasks.
-In Phase 2 of MAKI, corresponding work was generalised \cite{A3:ScWeHo2018, A3:GrScLiHo2019, A3:ScLiGrHo2018,A3:MaClScHo2019}, enabling programmability of wireless terminals at the lower layers.
-
-In summary, there is so far only isolated work in wireless communication systems that -- starting from commercially available terminals -- allows a far-reaching modification of the lower network layers. Subproject A3 plans to continue the work started in Phase 2 and to enable far-reaching programmability of the lower layers in terminals as well. This will make it possible to open up non-transition-capable terminals for transitions and thus, for example, to make them capable of meeting mission-critical requirements. 
-
-
-
-In Phase 3 of A3, the achievements of the previous phases are taken up.
-Work from the areas of data-driven acquisition and adaptation of network properties, as well as participatory decision-making, will be used to construct deformable transitions. 
-Nexmon and InternalBlue enabled firmware modifications for wireless network communications, laying a foundation for mechanism migration in firmware.
-Inherently extensible protocols as well as user-level networking stacks represent approaches outside of MAKI and are preliminary work that will be used to achieve the goals of Phase 3. 
-Taking into account the work presented, a novel methodology is created in A3 to achieve non-transitionable communication systems transition capability using mechanism migration and to deploy malleable transitions under the given framework.

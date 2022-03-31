@@ -10,3 +10,31 @@ The ''Treetalker''-platform is proprietary, and does not give buyers access to t
 
 For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{Treetalkers}.
 We call the resulting system \ttt.
+
+The TTCloud, and its associated Treetalkers, can be configured via text-message, also, collected data is sent to the cloud-backend via a mobile data connection\footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
+
+While LoRa-alliance certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN} which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{Treetalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
+
+For this reason, communication with each \textit{Treetalker} needs to be scheduled manually in such a way that avoids collisions.
+
+In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{Treetalker's} behaviour and network communications, to understand the communication protocol.
+
+Communication between the TTCloud and its sensor-stations is a call-response-protocol, initiated by the TreeTalker.
+The TTCloud's command message contains 4 fields, with which the Treetalker's behaviour can be influenced.
+\textit{Sleep} is the time that the device will sit idle in between measurements (defaults to 1 hour).
+\textit{Heating Time}, that is how long the Treetalker will run its internal heater before taking the second set of heat-probe measurments.
+Lastly, we have the \textit{time slot} and \textit{slot length}.
+These values govern the time that the device will wait between measurements and sending measurement data, it appears that these two values are simply multiplied to get the time-to-wait before transmitting.
+
+In normal operation, with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all Treetalkers attached to the gateway.
+The time slot length will also be the same for all nodes, while the gateway will assign each Treetalker a unique time slot.
+Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the Treetalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
+For this reason, there is also no way for a Treetalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
+
+With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the treetalker-network.
+
+\subsection{System Design}
+\label{sec:treetalker:design}
+
+Based on the ring-model described in section \ref{\label{sec:design}}, this scenario can be expressed as a 3-ring design.
+The innermost ring, the Treetalker's firmware is unaccessible to us

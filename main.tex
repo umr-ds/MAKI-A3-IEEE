@@ -17,15 +17,29 @@
     
 \bibliographystyle{ieeetr}
 
-\newcommand{\ttt}{TreeTalkerTalker}
-\newcommand{\envelope}{Envelope}
-
-% enable page numbering
+% enable page numbering, disable for final submission
 \pagestyle{plain}
+
+%%% Concepts used in the paper
+% Rings
+% Interrings
+% Envelope
+\newcommand{\env}{envelope}
+% System: Inside the Envelope
+% Environment: Outside of the Envelope
+% Mechanism: A certain mechanism is working as requested by the system
+% Mechanism Migration: Making a new mechanism usable by the system
+\newcommand{\mm}{Mechanism Migration}
+
+% Usecase A: TreeTalker Talker
+\newcommand{\ttt}{ForestEdge}
+% Useacse B: WireGuard Handovers
+\newcommand{\wgh}{TunnelHandovers}
+
 
 \begin{document}
 
-\title{Mechanism Migration: With envelops to more flexible and legacy free networks}
+\title{\mm: With envelops to more flexible networks}
 
 \author{
 \IEEEauthorblockN{

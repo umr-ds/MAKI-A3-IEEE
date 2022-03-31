@@ -1,11 +1,11 @@
 # ToDo
 
-Abstract - Patrick
-Introduction - Patrick 
-Related Work - Jonas
-Design / Concept - Artur
-wg-
-TTT - Markus  
+[ ] Abstract - Patrick
+[ ] Introduction - Patrick 
+[x] Related Work - Jonas
+[ ] Design / Concept - Artur
+[ ] wg review - Jonas
+[ ] TTT - Markus  
 
 
 Seitenlängen:
