@@ -1,4 +1,4 @@
-\subsection{General Design}
+\subsection{Enveloping Applications}
 The approach presented in this section relies on two building blocks: WireGuard and \ld.
 WireGuard is a simple, fast and secure VPN software that transmits encrypted data encapsulated in UDP datagrams.
 The use of UDP for communication eliminates the problem of TCP connection losses during handovers since neither UDP nor WireGuard is connection-oriented.
@@ -18,12 +18,12 @@ The \ld mechanism allows overriding functions of dynamically linked libraries, e
 
 The rough procedure is as follows.
 A WireGuard daemon is run on the local system.
-When a program is executed with our \ld modifications, the TCP packets of this particular application are passed to the local WireGuard daemon.
+When a program is executed with our modifications, the TCP packets of this particular application are redirected to the local WireGuard daemon.
 The UDP-based WireGuard packets are then sent to the WireGuard endpoint located in the network, which unpacks the encapsulated TCP connection and acts as a relay to forward the application data to the desired destination using conventional TCP/IP mechanisms.
 The responses from the server with which the application is communicating are sent back to the host via the same route, i.e. via the WireGuard tunnel.
-The exact implementation and configuration will be discussed below.
+% The exact implementation and configuration will be discussed below.
 
-\subsection{Implementation}
+% \subsection{Implementation}
 % Several implementations lead to the desired result, but with different drawbacks.
 % The first approach would be to configure the WireGuard in a way so that no traffic is sent through the tunnel and the \ld implementation sets a rule in the routing table that causes the traffic of an application to be sent through the WireGuard tunnel on a IP address basis.
 % However, this approach has several disadvantages.

@@ -1,20 +1,32 @@
 \documentclass[conference]{IEEEtran}
 
+% redefine ieee fonts for XeLaTex
+\usepackage{etoolbox}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{TeX Gyre Cursor}
+
+
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{hyperref}
 \usepackage{todonotes}
 \usepackage{listings}
 \usepackage{bytefield}
 \usepackage{xspace}
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-    
+\usepackage{cleveref}
+\usepackage{xspace}
+
+% Orcid logo for XeLaTeX
+\usepackage{academicons}
+\definecolor{orcidlogocol}{HTML}{A6CE39}
+
 \bibliographystyle{ieeetr}
 
 % enable page numbering, disable for final submission
@@ -24,31 +36,36 @@
 % Rings
 % Interrings
 % Envelope
-\newcommand{\env}{envelope}
+\newcommand{\env}{envelope\xspace}
 % System: Inside the Envelope
 % Environment: Outside of the Envelope
 % Mechanism: A certain mechanism is working as requested by the system
 % Mechanism Migration: Making a new mechanism usable by the system
-\newcommand{\mm}{Mechanism Migration}
+\newcommand{\mm}{Mechanism Interception\xspace}
 
 % Usecase A: TreeTalker Talker
-\newcommand{\ttt}{ForestEdge}
+\newcommand{\ttt}{ForestEdge\xspace}
 % Useacse B: WireGuard Handovers
-\newcommand{\wgh}{TunnelHandovers}
+\newcommand{\wgh}{TunnelHandovers\xspace}
 
 
 \begin{document}
 
-\title{\mm: With envelops to more flexible networks}
+%\title{\mm: Modifying Functionality of Communication Systems with Proprietary Components Interceptor }
+
+%\title{Unobtrusive Mechanism Interception: Modifying Functionality of Communication Systems with Proprietary Components }
+
+\title{Unobtrusive Mechanism Interception: \\ 
+Teaching an Old Dog New Tricks}
 
 \author{
 \IEEEauthorblockN{
-    Patrick Lampe, 
-    Markus Sommer, 
-    Artur Sterz, 
-    Jonas Höchst, 
+    Patrick Lampe\href{https://orcid.org/0000-0002-6233-0959}{\textcolor{orcidlogocol}{\aiOrcid}}, 
+    Markus Sommer\href{https://orcid.org/0000-0003-4691-779X}{\textcolor{orcidlogocol}{\aiOrcid}}, 
+    Artur Sterz\href{https://orcid.org/0000-0001-9820-7373}{\textcolor{orcidlogocol}{\aiOrcid}}, 
+    Jonas Höchst\href{https://orcid.org/0000-0002-7326-2250}{\textcolor{orcidlogocol}{\aiOrcid}}, 
     Christian Uhl, 
-    Bernd Freisleben
+    Bernd Freisleben\href{https://orcid.org/0000-0002-7205-8389}{\textcolor{orcidlogocol}{\aiOrcid}}, 
 }
 \IEEEauthorblockA{
     Department of Mathematics \& Computer Science, University of Marburg, Germany\\
@@ -58,7 +75,7 @@
         \href{mailto:sterz@informatik.uni-marburg.de}{sterz}, %
         \href{mailto:hoechst@informatik.uni-marburg.de}{hoechst}, %
         \href{mailto:uhlc@informatik.uni-marburg.de}{uhlc}, %
-        \href{mailto:freisleben@informatik.uni-marburg.de}{freisleben}%
+        \href{mailto:freisleb@informatik.uni-marburg.de}{freisleb}%
     \}@informatik.uni-marburg.de
 }
 }

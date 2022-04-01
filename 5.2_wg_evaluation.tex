@@ -1,6 +1,6 @@
-\subsection{Evaluation}
+\subsection{Experimental Evaluation}
 To evaluate the proposed approach and show the feasibility of enabling existing TCP-based applications to perform seamless handovers, we performed extensive emulations in two scenarios.
-In this section, we present the experimental environment and discuss the evaluation results.
+% In this section, we present the experimental environment and discuss the evaluation results.
 
 
 \begin{figure*}[tb]
@@ -18,7 +18,7 @@ In this section, we present the experimental environment and discuss the evaluat
 
 
 \subsubsection{Experiment Setup}
-\paragraph{Emulation}
+% \paragraph{Emulation}
 To conduct the evaluation, two scenarios were emulated, of which the first one (S1) simulates leaving a location.
 Here, the handover is performed from Wi-Fi to LTE.
 The second scenario (S2) simulates the corresponding handover from LTE to Wi-Fi, e.g., when entering a building providing a Wi-Fi connection.
@@ -37,11 +37,11 @@ Fig.~\ref{fig:eval:mig:topo} shows the topology used for the evaluation.
 % First, a mobile client node is required, which is the bottom node in Fig.~\ref{fig:eval:mig:topo}.
 The client (bottom) contains the TCP-based application that shall be enabled with handover capabilities and the WireGuard client.
 Further, the client node is the only node moving throughout the emulation.
-In S1, the client moves from left to right (blue arrow in Fig.~\ref{fig:eval:mig:topo}) and loses the Wi-Fi connection roughly in the middle of the movement range, where it currently positioned in Fig.~\ref{fig:eval:mig:topo}. 
-In S2, the node moves from right to left (red arrow in Fig.~\ref{fig:eval:mig:topo}) and regains the Wi-Fi connection at the same position.
+In S1, the client moves from left to right (blue arrow) and loses the Wi-Fi connection roughly in the middle of the movement range. 
+In S2, the node moves from right to left (red arrow) and regains the Wi-Fi connection at the same position.
 The LTE connection is available throughout the entire experiment, whereby the Wi-Fi connection is prioritized if available.
 The mobility is modeled in a way to simulate human walking, i.e., 5 to 6 km/h.
-Further, we modeled a Wi-Fi access point (Wi-Fi AP on the left in Fig.~\ref{fig:eval:mig:topo}) and a corresponding Wi-Fi router.
+Further, we modeled a Wi-Fi access point (Wi-Fi AP on the left) and a corresponding Wi-Fi router.
 % The client is connected to the Wi-Fi AP, which in turn uses the Wi-Fi router to route traffic.
 We modeled the Wi-Fi AP to match the IEEE 802.11ac standard, i.e., roughly 1 Gbit/s throughput.
 On the bottom right in Fig.~\ref{fig:eval:mig:topo}, the LTE access network (LTE AN) was modeled to match current LTE speeds of about 100 MBit/s.
@@ -50,7 +50,7 @@ In the middle of the topology, a router was modeled to mimic the backbone of the
 The second node from the top is the WireGuard endpoint, that is used to terminate the WireGuard tunnel.
 % From this node, the arriving encapsulated TCP connection from the client is extracted and relayed to the server and TCP-packets from the server encapsulated and transmitted using WireGuard to the client.
 % The WireGuard endpoint node also acts as a regular backbone router in experiments not using the WireGuard tunnel.
-Finally, on top of Fig.~\ref{fig:eval:mig:topo}, the server node is modeled, which only contains the application's server.
+Finally, the server node is modeled (top), which only contains the application's server.
 
 % The red connections in Fig.~\ref{fig:eval:mig:topo} represent wired connections between the corresponding nodes.
 % The connection between the Wi-Fi router and the backbone router is modeled to mimic a standard uplink that can be found in homes with 100 MBit/s.
@@ -59,17 +59,16 @@ Finally, on top of Fig.~\ref{fig:eval:mig:topo}, the server node is modeled, whi
 % \paragraph{Applications}
 In order to simulate a TCP-based application, iPerf3\footnote{\url{https://iperf.fr}} was used.
 iPerf3 is an open-source tool for measuring network throughput in IP network following the client-server paradigm and supports various transport layer protocols.
-The server node in the evaluation topology runs an iPerf3 server, whereas the client node runs the iPerf3 client.
-The client also initiates the connection to the server upon experiment start using the currently active connection, i.e., Wi-Fi if available, otherwise LTE.
+% The server node in the evaluation topology runs an iPerf3 server, whereas the client node runs the iPerf3 client.
+The client initiates the connection to the server upon experiment start using the currently active connection, i.e., Wi-Fi if available, otherwise LTE.
 Each experiment was executed for 120 seconds in total.
 Within the first 50 seconds, where used to allow the emulation establish routes throughout the network, so that packets can be routed from client to server and back again.
 As soon as the routes were announced, the movement and iPerf started for 60 seconds.
 The last 10 seconds were used to tear down the emulation.
-
 In addition to the presented handover-approach, we also conducted experiments without a tunnel, using the regular routing mechanisms of the Linux kernel to be able to compare the achievements of our approach.
 Each experiment was repeated five times to reduce effects like race conditions during booting the emulation and other side effects.
 
-\subsubsection{Experimental Results}
+\subsubsection{Results}
 
 % \paragraph{Supporting Vertical Handovers}
 Fig.~\ref{fig:eval:mig:network} shows the results for the conducted experiments.

@@ -1,122 +1,5 @@
-\section{Concept}
+\section{System Model}
 \label{sec:design}
-
-This section introduces the concept of \mm and the components required to achieve \mm.
-
-\subsection{Rings}
-Modern information and communications technology consists of a multitude of components like access devices (smartphones, computers, etc.) and network infrastructure (routers, back-bone network), software (e.g., operating systems, middle-ware, applications), networks, network topologies, network protocols on various layers, compute facilities (cloud, edge, etc.) and so on.
-To give order to the overall design, these components can be arranged in a domain-specific ring structure, as shown in Fig.TODO, where each \emph{ring} represents a component required for the given domain.
-The most specific component for the given domain forms the center of the structure and components are added as rings.
-As an example, a system providing a VoIP service to users, the telephony application would form the center.
-This application requires the operating system and its networking APIs, which represents the ring around the application, whereas the next outer ring represents the local area network.
-This categorization allows arbitrary deep rings that seem appropriate for the given domain.
-In the above example, the outer most ring would be the backend executed on a server in the cloud.
-
-
-\subsubsection{Interrings}
-Between every ring, the components require interaction.
-In the above example, the telephony application uses the operating system's networking API to send and receive data.
-Thereon, the OS uses for example Wi-Fi or cellular connectivity to access the local area network, and so on.
-These interaction layers are called \emph{interrings}.
-
-TODO:
-\mm
-\env
-outer: environment
-inner: system
-mechanism
-
-
-
-
-
-
-
-
-\paragraph{Mechanism}
-
-We use the definition of \cite{} for Mechanisms: "A mechanism is a confined conceptual element of a networked system that is bound to a realization as cooperating functional units; the special case of an isolated realization (single-node) is permitted."
-
-Examples of such mechanisms are manifold and span all protocol- and system-layers, as the following selection of possible mechanisms shows:
-
-\begin{itemize}
- \item Complete protocols: TCP, UDP, RTP, overlays, etc.
- \item Fine-grained protocol mechanisms: congestion control, fragmentation, load balancing, replication, etc.
- \item Network concepts: infrastructure-based, ad-hoc, partially meshed, delay tolerant (DTN), etc.
- \item Network technologies: Ethernet, LTE, IEEE 802.11, Bluetooth, etc.
- \item Security mechanisms: encryption, integrity protection, authentication, etc.
- \item System components: positioning (via WLAN, GSM or GPS), sensors, etc.
-\end{itemize}
-
-\subsection{Concept}
-\label{sec:design:concept}
-
-Any communication between different parties relies on one or many \textit{communication interfaces}.
-Such an interface can be anything from set of rules governing the actual communication, such as protocols defined on the different layers of the network-stack-model, to implicit assumptions over the inner workings of peers in a network.
-While the network stack itself already offers plenty of possibilities to intervene and modify a node's behavior, via the use of a \textit{network shim}, extending this line of thought to include the entirety of a node's behavior allows for novel approaches to the problem of communication adjustments.
-
-The advantage of such a holisitc approach to communication behavior can be seen in the fact, that it allows us to also alter behavior of network participant which are incapable or unwilling to modify their own operation.
-This could be due to a network participant being built upon a proprietary frameworks, which disallows the modification of the device after sale, or simply due to the manufacturer dropping support.
-In such a case we are unable to modify the node itself, but we may still be capable of modifying its environment to enforce the desired adaption in its behavior.
-
-This change can be thought of as an ''outer'' level of the communication infrastructure enveloping an ''innter'' level and thus forcing a change.
-When faced with a closed application, we might modify the operating system to force the applications behavior to change by, for example, modifying the network stack to transparently wrap connection in a VPN.
-
-If the whole device is unmodifiable, but the network is under our control, then we may utilize the network  to force the device to behave in a certain way, e.g. by placing gateway-servers inside  the network who can transparently alter traffic flows.
-
-If even the network is outside our control, then we may still affect change by modifying, or replacing the communication partner/backend with which the device is communicating.
-By knowing the communication protocols and crafting messages in such a way that will trigger certain behavior in the device.
-
-In addition to classic wireless technologies such as WLAN and LTE, multi-RATs are becoming the standard in mobile communication in the context of 5G. 
-At the same time, these multi-RATs can so far only be used within the scope of the functionality implemented in the technology and do not allow fine-grained user control over the parameters of the lower layers.
-It is desirable not only to combine the standard technologies advantageously, as can be done by multipath transport protocols, but also to adapt the individual RATs at runtime through targeted modification at the lower layers in such a way that the cooperation between the RATs is further optimised. 
-For example, some RATs can no longer be used sensibly if, due to harsh environmental conditions, an excessively high packet error rate occurs even with robust coding and modulation procedures. A solution approach for this could be:
-\begin{itemize}
-\item the combination of several RATs with dynamic splitting of data between the RATs,
-\item splitting data packets into smaller units to maximise their reliable transmission, and 
-\item the use of customised error correction procedures across all RATs to ensure e.g. mission critical requirements.
-\end{itemize}
-
-In order to make the aforementioned adaptations also on legacy devices, it is necessary to migrate novel functionality to existing devices, for example by implanting an error correction mechanism that covers all RATs simultaneously, or configuring a RAT also outside the configuration predefined by the equipment provider. 
-
-\paragraph{OS-side Adaption}
-
-From the OS view the possible 
-
-\paragraph{Network-side Adaption}
-
-From the network point of view a legacy device can be handled as blackbox and arriving data can be interpreted as byte string which can be eg. split and send over different RATs. 
-All additional concepts and improvements like custom error correction could also be applied on lower layer. 
-This is the easiest way for a conceptional view of the data transmission and offers many possibilities of improvements.
-But two possibilities exist:
-1. The backend or target of the communication understands this change, then it can be easily done by the enveloping network
-2. The backend or target of the communication is as legacy as the enveloped system, then the backend must also be encapsulated by an envelopment and the operations must be reversed.  
-
-Alternatively, if the specific communication protocol used by the legacy device is known, the network can influence the device's operation by crafting packets which trigger changes in legacy device behaviour.
-
-In a scenario, which includes both transition-enabled, and legacy devices, this enables the network-controller to orchestrate the legacy device's behaviour in such a way, the allows for smooth operation of such a heterogeneous network.
-For example, the network could strategically drop packets, modify flow-control header fields or restrict bandwidth to ensure that a legacy device does not attempt to utilise more network bandwidth that would be appropriate.
-
-Furthermore, when the device's internal behaviour depends directly on received packets, for example if the device receives commands via the network, then these packets can be crafted in such a way, that limit traffic generation on the device itself.
-In section \ref{sec:implementation:treetalker}, we will go into a concrete example for the approach, which involves a distributed sensor-network connected by the low bandwidth LoRa wireless-communication standard.
-
-%\subsection{Concept}
-%\label{sec:design:concept}
-
-%\paragraph{OS-side}
-
-%Design graph for OS-side concept
-%+ description of the concept from this point of view
-
-%\paragraph{Network-side}
-
-%Design graph for Network-side concept
-%+ description of the concept from this point of view
-
-%%\paragraph{Holistic Concept}
-
-%Merging both concepts results in a general approach and in the concept of mechanism migration to legacy devices.
-
 
 \begin{figure}
     \centering
@@ -125,3 +8,57 @@ In section \ref{sec:implementation:treetalker}, we will go into a concrete examp
     \label{fig:bigpicture}
 \end{figure}
 
+The concept of \emph{\mm} allows altering behavior of information and communications system (ICS) that are incapable or unwilling to modify their own operation.
+This could be due to an ICS being built upon proprietary frameworks disallowing modification of the device, manufacturers dropping support or by the unwillingness to make the effort to adapt or update the components of the ICS.
+In such cases developers or network operators are unable to modify the ICS itself.
+However, the proposed approach of \mm enables the modification of an ICS's environment to enforce the desired adaption in its behavior.
+This change can be thought of as an ''outer'' level of the communication infrastructure enveloping an ''inner'' level.
+
+For example, when faced with a closed application executed on a smartphone, operating system (OS) might be modified to force the applications behavior to change by modifying the OS network stack to transparently wrap connection in a VPN.
+If a whole device is unmodifiable, but the network is under control of the network operator the network can be utilized to force the device to behave in a desired way, e.g. by placing gateway-servers inside the network who can transparently alter traffic flows.
+If even the network is outside control modifying or replacing the communication partner/backend with which the device is communicating is possible.
+
+
+\subsection{Rings}
+As the above examples suggest, modern information and communications technology consists of a multitude of components like access devices (smartphones, computers, etc.) and network infrastructure (routers, back-bone network), software (e.g., OSs, middle-ware, applications), networks, network topologies, network protocols on various layers, compute facilities (cloud, edge, etc.) and so on.
+We subdivide these components into a ring structure, as shown in \Cref{fig:bigpicture}, where each \emph{ring} represents a component required for the given domain.
+The most specific component, whose functionality is to be improved by the proposed \mm, forms the center of the structure, called \emph{objective}, while other components are added as rings.
+As an example, an ICS providing a VoIP service to users, the telephony application installed on the end-users device would form the objective, as it should be modified in some way.
+This application requires the OS and its networking APIs, which forms the ring around the application, whereas the next outer ring forms the local area network.
+This categorization allows arbitrary deep rings that seem appropriate for the given domain.
+In the above example, the outer most ring would be the backend executed on a server in the cloud.
+For enabling \mm, it is important to be able to modify or alter rings around the objective, although it is not required to have control of all rings but only the ring required to achieve the desired result.
+
+
+\subsection{Interrings}
+Between adjacent rings, components require interaction.
+Such an interface can be anything from set of rules governing the actual communication, such as protocols defined on the different layers of the network-stack-model, to implicit assumptions over the inner workings of peers in a network.
+In the above example, the telephony application uses the OS's networking API to send and receive data.
+Thereon, the OS uses for example Wi-Fi or cellular connectivity to access the local area network, and so on.
+These interaction layers are called \emph{interrings} and are represented as gray layers between the rings in \Cref{fig:bigpicture}.
+Beyond the network stack on a local device itself, interrings include any functionality that allows interaction between two rings like system calls in an application-OS relation or communications between multiple nodes in a network.
+
+
+\subsection{Mechanism}
+A \emph{mechanism} is a functional part of an interring that realizes functional units to achieve the desired functionality of the objective.
+Examples of such mechanisms are manifold and span all protocol- and system-layers, as the following selection of possible mechanisms shows:
+
+\begin{itemize}
+ \item Complete protocols: TCP, UDP, RTP, overlays, etc.
+ \item Specific parts of protocols: congestion control, fragmentation, load balancing, replication, etc.
+ \item Network concepts: infrastructure-based, ad-hoc, partially meshed, delay tolerant (DTN), etc.
+ \item Network technologies: Ethernet, LTE, IEEE 802.11, Bluetooth, etc.
+ \item Security mechanisms: encryption, integrity protection, authentication, etc.
+ \item System components: positioning (via WLAN, GSM or GPS), sensors, etc.
+\end{itemize}
+
+ 
+
+\subsection{Envelope, System and Environment}
+In order to realize the proposed approach, it is necessary to migrate novel functionality to existing ICS.
+An \emph{\env} is a component containing such a new or alternative mechanism that is migrated to the interring between the last ring that is under control and the first ring that is not under control.
+For example, if the telephony application that should support vertical handovers is not modifiable but the OS, the \env containing a mechanism enabling vertical handovers could be placed in the interring between application and the OS.
+It might also be desirable to migrate an \env into an outer interring, although a ring closer to the objective might be still under control.
+All rings, including the objective, that are located within the \env are summarized as the \emph{system} and all rings outside the \env are called \emph{environment}.
+
+ 

@@ -1,19 +1,18 @@
-% In this paper we present e study of mechanism migration and malleable transitions. 
-% These two novel approaches open up transitions dedicated for non-transitionable communication systems. 
-% First, potential mechanisms suitable for migration are identified, e.g., by methods of static and dynamic software analysis. 
-% Methods for the migration of mechanisms are elaborated and selected mechanism migrations are investigated. 
-% Specifically, suitable methods for the functional extension of non-transition-capable communication systems by new mechanisms will be explored, such as methods for modification (e.g., binary patching, library preloading, code injection) as well as preemption and redirection (e.g., proxies, splitting of data streams and/or packets). 
-% Inherently extensible mechanisms are designed to ensure forward compatibility.
-% Deformable transitions are realized exemplarily to gain knowledge about their applicability in real communication systems. 
-% From this, recommendations for action and software design patterns for the creation of deformable transitions are derived. 
-% Subsequently, the concepts of mechanism migration and deformable transitions are used in combination to realize system-wide cooperative transitions. 
-% For this purpose, new mechanisms are introduced into per se non-transition-capable communication systems, which can be deployed by means of automatically adapted deformable transitions under the decision bases given by the target systems. 
-% The obtained results are evaluated to demonstrate practical applicability. 
-% A systematic evaluation of the performance of selected mechanism migrations and deformable transitions is performed under realistic conditions in the MAKI SDWN testbed (e.g., for web services, applications, smartphones, firmware).
-
-
 \begin{abstract}
+Networked systems and applications are often based on proprietary hardware/software components that manufacturers might not be willing to adapt or update if new requirements arise.
+%Furthermore, to deploy new hardware/software components, long development and standardization processes are typically required.
+We present \emph{mechanism interception}, a novel approach to unobtrusively add or modify functionality to/of an existing networked system or application without touching any proprietary components. Behavioral changes
+are achieved by functionality-enhancing yet unobtrusive interceptors, e.g., an updated software library, a newly deployed edge device, or an enhanced cloud service.
+We illustrate our approach by two case studies
+that 
+%highlight its advantages and 
+show its real-world applicability:
+(a) we unobtrusively replace a cloud infrastructure by an edge infrastructure in a wireless sensor network, and
+(b) we unobtrusively add a vertical handover mechanism between WiFi and LTE to a mobile end device without disconnecting TCP sessions.
+Our results indicate that mechanism interception is a compelling approach to achieve improved service quality and provide previously unavailable functionality in an unobtrusive manner.
 \end{abstract}
 
+
 \begin{IEEEkeywords}
+    Network Protocols, Embedded Devices, Sensor Networks, Edge Computing, Mechanism Interception
 \end{IEEEkeywords}

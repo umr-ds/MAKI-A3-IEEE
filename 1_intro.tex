@@ -1,7 +1,20 @@
 \section{Introduction}
 \label{sec:intro}
 
-The protocols used in networks today have been standardised over a long period of time and implemented in operating systems and devices.
+In our daily life, many devices are used that are based on communication. 
+This can be the smartphone, the smart light bulb or the car radio. 
+However, computers are not only increasingly used in private life, but also in all conceivable professional areas, for example in industry, computer-supported applications have become indispensable.  
+This increased use and the long application of these systems raises the question of how the systems can be supplied with updates over time. 
+With open source applications and operating systems this may work for experienced users, but for proprietary applications, components or systems this is only possible through the manufacturers.
+Especially in the industry where machines do not primarily fulfill the purpose of a computer, but the tasks only computer supported happen, many devices exist that have this dependence on manufacturers. 
+But also in the other mentioned areas proprietary software, components and systems dominate the market.
+As long as the manufacturer is willing and able to provide the systems with updates, there is the possibility for the hardware and software components to continue to be supplied with innovations, but if not, then the systems are frozen at this level of functionality. 
+Thus, the scope of functionality depends solely on the will of the manufacturer.
+Also, new challenges, for example in security, but also in the introduction of new technologies, often lead to the fact that new functionality is not transferred to all hardware and software components. 
+This quickly leads to these systems becoming legacy more quickly than would be necessary. 
+
+In particular, network systems have many protocols that are not proprietary and should be more interchangeable and extensible by design. 
+But the protocols used in network systems today have been standardised over a long period of time and implemented in operating systems and devices by the manufacturer.
 Much of the internet traffic is based on the TCP protocol \cite{A3:john2007analysis}, which is standardised by the IETF and extended with new parts as needed. 
 However, integrating new functionality into existing protocols is very time-consuming and subject to a lengthy process \cite{A3:de2019pluginizing}. 
 For example, an approach has been presented in the literature that adds network coding to TCP \cite{A3:sundararajan2011network}. 
@@ -9,9 +22,35 @@ These changes are only applicable if the implementation is widely used and both 
 Another way would be to publish a new protocol with the new functionality instead of extend a existing protocol, but the problem remains the same. 
 This creates a fundamental problem: vendor who switch to a new standard or extensions early on have hardly any advantages of their own at the beginning, but without advantages of their own, hardly any vendor will switch.
 This means that it takes longer to achieve a certain spread in the market, as a certain critical mass of users must be exceeded. 
-This makes the introduction of extensions even more difficult.
-In order to achieve the transition capability of communication systems in practice, transitions must therefore be usable on as many devices as possible.
-To maximize the benefit for early adopters a method to get new functionality to legacy devices called  "mechanisms migration" seems to be promising.
-On the one hand a mechanism migration on the operating-system-level could be a good way to break the innovation blocking point of gaining nearly no benefits for the vendor, by integrating new functionality to legacy apps and supporting new functionality os wide.
-On the other hand the network itself could wrap non-changeable legacy devices to virtually bring new functionality to this devices to support a wide range of them and enable an easy way of bringing new technology much faster to legacy devices and spread new technology. 
 
+But communication protocols are only one level on which this problem occurs, as well as special parts of communication protocols like congestion control or even whole network concepts like DTN or even transmission technologies. 
+All these categories have the problem that first enough systems have to be accessible for the functionality to take advantage of the usage. 
+This is also true for security mechanisms that should be used for security reasons but are not available in legacy or unmodifiable systems. 
+Here, the \mm can contribute to the security of systems by making these security mechanisms available.
+
+In order to achieve the transition capability of networked systems in practice, transitions must therefore be usable on as many devices as possible.
+To maximize the benefit for early adopters a method to get new functionality to legacy devices called  \mm seems to be promising.
+On the one hand a \mm on the operating-system-level could be a good way to break the innovation blocking point of gaining nearly no benefits for the vendor, by intercepting communication and integrating new functionality to legacy apps and supporting new functionality os wide.
+On the other hand the network itself could wrap non-changeable legacy devices to virtually bring new functionality to this devices to support a wide range of them and enable an easy way of bringing new technology much faster to legacy devices and spread new technology. 
+In many areas of industry and other businesses, systems such as machines or sensor nodes are in use for many years and are not constantly renewed, especially since this would not be monetarily representable.
+In these areas it is essential that new functionality are also made available to these systems.
+To address this problem, among others, we introduce \mm. 
+
+% NAT als related Work / als Interceptor
+% 6in4 / 4in6
+% Wine
+% Interceptor Pattern als Inspiration
+% https://patents.google.com/patent/WO2003047205A1/en20
+% https://link.springer.com/chapter/10.1007/978-3-030-73885-3_14
+
+
+
+Our contributions are:
+
+\begin{itemize}
+ \item a
+ \item b 
+ \item c
+\end{itemize}
+
+The paper is organized as follows. 
