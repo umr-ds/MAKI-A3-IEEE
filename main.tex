@@ -22,12 +22,21 @@
 \usepackage{xspace}
 \usepackage{cleveref}
 \usepackage{xspace}
+\usepackage{booktabs}
+
+\bibliographystyle{ieeetr}
 
 % Orcid logo for XeLaTeX
 \usepackage{academicons}
 \definecolor{orcidlogocol}{HTML}{A6CE39}
 
-\bibliographystyle{ieeetr}
+
+% more beautiful tables
+\rowcolors{2}{white}{gray!25}
+\makeatletter
+\AtBeginEnvironment{table}{\global\rownum=0\relax}
+\def\arraystretch{1.2}
+\setlength{\tabcolsep}{2mm}
 
 % enable page numbering, disable for final submission
 \pagestyle{plain}
