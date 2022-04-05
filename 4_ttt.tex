@@ -38,21 +38,41 @@ With the insights gathered by our analysis we were able to fully replace and imp
 
 \subsection{General Design}
 \label{sec:treetalker:design}
+% System: Alle Treetalker, Ziel: Daten generieen und sie verfügbar machen
+% Environment: LoRa Gateway (normalerweise TTCloud) -> Internet
+% Mechanism: Lora 
+% Interceptor: TTT + Remote (zusammen ForestEdge)
+% Unobtrusive: TreeTalker soll keinen Unterschied zw. TTC und ForestEdge erkennen können
 
-Based on the ring-model described in section \ref{sec:design}, this scenario can be expressed as a 3-ring design.
-The innermost ring, the Treetalker's \textit{firmware} is unaccessible to us, as are the next two, the \textit{hardware} ring and the \textit{link} ring.
-This is all due to the Treetalker-platform being a proprietary black-box, and using an equally closed-source LoRa-module for communication.
-It is therefore only at layer 4, the \textit{network} itself, where we can attach ourselves.
-The particular \mm we are applying, rather than the insertion of an interring, or modification of an existing ring, is the wholesale replacement of this fourth ring with our own hardware.
+Based on the ring-model described in \ref{sec:design}, this scenario contains the following components:
+a) The \textit{system}, in this case, is a swarm of deployed Treetalkers in a forest, its goal is the collection of accurate environmental data and to make it available to users.
+b) The \textit{environment} starts with the vendor-supplied TTCloud and communicates with the vendors backend to make the aggregated data available for download.
+Therefore the TTCloud also contains the required internet up-link.
+c) The \textit{mechanism}, which allows the Treetalker swarm to talk to the system, is LoRa.
+d) \textit{\ttt} is the \textit{interceptor}.
+It replaces the vendor locked TTCloud, communicates with the Treetalker swarm via LoRa, and ultimately allows users to access the data in a more convenient format.
+Furthermore, it enhances the functionality of the system as a whole by introducing anomaly detection and therefore improve the quality of the collected data.
+e) This approach is \textit{unobtrusive}, since the Treetalkers are unable to distinguish between a first-party TTCloud and \ttt.
 
-Our network architecture employs two separate decision making instances, one is located on the physical device located in the forest which communicates directly with the Treetalker and only has information on its directly connected sensors-nodes, with a second, centralized ''aggregator'' instance on the backend which has global knowledge of all nodes in the network.
+%Based on the ring-model described in section \ref{sec:design}, this scenario can be expressed as a 3-ring design.
+%The innermost ring, the Treetalker's \textit{firmware} is unaccessible to us, as are the next two, the \textit{hardware} ring and the \textit{link} ring.
+%This is all due to the Treetalker-platform being a proprietary black-box, and using an equally closed-source LoRa-module for communication.
+%It is therefore only at layer 4, the \textit{network} itself, where we can attach ourselves.
+%The particular \mm we are applying, rather than the insertion of an interring, or modification of an existing ring, is the wholesale replacement of this fourth ring with our own hardware.
 
-When the local decision engine receives a packet, it both stores the data locally and also sends it onwards to the global aggregator.
-This aggregator periodically aggregates all the data from all the nodes and computes relevant benchmark values which are then distributed to all stations.
-When it wants to generate a reply packet, the local station performs a statistical evaluation on the node's previous measurement data, and how it related to the aggregator-supplied benchmark values.
+Our network architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the Treetalker swarm, and only has data on its directly connected sensors-nodes.
+The second, centralized ''aggregator'' instance on the backend, has global knowledge of all nodes in the network.
+
+When the local decision engine receives a packet, it both stores the data locally and also sends it onwards to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
+These are then distributed to all stations.
+When it generates a reply packet, the local decision engine performs a statistical evaluation on the node's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
 If it detects an anomaly, it may require the Treetalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
 
-In order to make decisions based on the detection, concept recognition is necessary. This is done by comparing a long-running process with a short-running one. It has been shown that the calculation of the twofold standard deviation for short-running processes is already sufficient to be able to make decisions - for example, whether a new measurement is necessary or these new values can be appointed as the new standard. In general, the preferred method for making decisions is to reduce the upcoming measurement interval in order to verify and increase the accuracy of the collected data. Due to the minor costs on battery consumption and data transmission over Lora, even 20\% double measurements are insignificant for the overall system operation. 
+In order to make meaningful decisions, concept recognition is necessary.
+This is done by comparing a long-running, and short-running time-window of the data.
+It has been shown that the calculation of the twofold standard deviation for short-running windows is already sufficient to be able to make decisions - for example, whether a new measurement is necessary or these new values can be appointed as the new standard.
+In general, the preferred decision is to reduce the upcoming measurement interval in order to verify and increase the accuracy of the collected data.
+Due to the minor costs on battery and data transmission over Lora, even a 20\% increase in measurements is insignificant for the overall energy consumption. 
 
 \subsection{Evaluation}
 \label{sec:treetalker:evaluation}
