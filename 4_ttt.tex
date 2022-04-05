@@ -69,17 +69,21 @@ In order to compare the response time of our system versus the TTCloud, we used 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figures/response_times.pdf}
-    \caption{Response time of both the first-party \textit{TTCLoud}, as well as the \textit{\ttt}.}
+    \caption{Response time of both the first-party \textit{TTCLoud}, as well as \textit{\ttt}.}
     \label{fig:evaluation:ttt_response}
 \end{figure}
 
 As can be seen in figure \ref{fig:evaluation:ttt_response}, the \ttt is capable delivering responses with a similar delay as the TTCloud.
-In fact, the actual time it takes to arrive at a decision and craft the reply-package is merely one-tenth of the total time, the other nine-tenths being the time neccessary to transmit the packet via LoRa.
+The three bars are, from left to right: 1) The total response time of \ttt, including both the time it takes to generate a reply packet, as well as transmitting it via LoRa. 2) The response time of the first-party TTCloud, also including LoRa Transmission. 3) The time it takes \ttt just to generate the reply packet.
+In fact, the actual time it takes to arrive at a decision and craft the reply-package is less than one quarter of the total time, the other three quarters being the time necessary to transmit the packet via LoRa.
+The TTCloud, which does no further processing whatsoever, does have the advantage of only sending the same reply every time, thus not requireing any additional time for computations of any kind.
+Therefore, it is sometime very slightly faster, though not by any significant margin.
 
-It should be noted, that there are occasional outliers, wherein the {\ttt}'s will take a significantly longer time than average.
-But even in these situations, the response-time is on-par with the TTCloud, rather than being higher.
+While there are occasional outliers, wherein the analysis of a packet and the generation of the appropriate response packet take significantly longer, these are very rare, being 4 out of 200 cases.
+This is most likely due to database-queries occasionally taking longer, probably due to scheduling issues.
 
-\paragraph{Anomaly Detection}
+\subsubsection{Anomaly Detection}
+\label{sec:evaluation:anomaly-detection}
 
 To evaluate whether the anomaly-detection functions as intended, we drew upon real-world data gathered by a Treetalker-deployment, which was created as part of the \textit{Nature 4.0} project of the University of Marburg.
 This deployment is comprised of 100 Treetalker which were set up in a university-owned parcel of forest and has been continually gathering sensor data for the past 2 years.
@@ -102,3 +106,8 @@ The evaluation was performed by injecting historical data into the policy-engine
 As becomes obvious from table \ref{tab:evaluation:anomalies}, the vast majority of events are produced by the accelerometer, and more specifically by the values denoting the sensor's position.
 
 Further investigation of the data revealed that this seems to be due to a systematical fault in either the installed sensor itself, or the method in which this sensor is queried by the onboard electronics.
+The data reported by the Treetalker for this sensor seems to be completely erratic and entirely unsuited as a basis for further decision-making.
+This fault had previously not been noticed by the operator and could have wrought havoc on data analysis performed on the gathered data, but with the aid of \ttt, we were able discover this deficiency before it could impact further decision-making.
+
+In conclusion, by applying our interception-concept to the Treetalker-network, we were able to significantly improve the system's functionality and performance.
+We were also able to leverage behavioral modification to enable interactivity on an otherwise static system, which allowed us to recognise faulty sensors and prevent corrupted data from derailing other research projects.
