@@ -7,13 +7,13 @@
 A major unsolved problem in today's mobile communications is vertical handovers.
 Vertical handover (henceforth simply called ''handovers'') describes the switching process of a networked device from one network access to another.
 Probably the best-known example is the switch from a mobile phone's Wi-Fi to a cellular connection, for example when leaving home on the way to the office.
-The core problem with handover is protocols such as TCP, which were designed in a time when wireless communication did not yet exist and therefore disconnections on the transport layer were not foreseen.
+The core problem with handover are protocols such as TCP, which were designed in a time before wireless communication and therefore did not forsee disconnections on the transport layer.
 If the connection on the transport layer is interrupted, the connections on the application layer must also be re-established, which can lead to different implications for different applications, such as interruptions of audio streams when listening to music or making phone calls.
 Several solutions have already been discussed in the past.
 There are standards that explicitly support mobility of nodes and implement mechanisms to support handovers, most notable Multipath-TCP, SCTP and QUIC.
 However, all these approaches have the core problem that they have to be deployed and supported by a major number participants in the network.
 % So far, none of these protocols have gained any substantial deployment.
-Further, all of these solutions require application developers to update and adjust their application to support these protocols, further hindering broad usage.
+Furthermore, all of these solutions require application developers to update and adjust their application to support these protocols, further hindering broad usage.
 
 In this section, we present an approach that uses common Linux mechanisms to enable handovers without TCP session disconnects, and without the need to roll out new, complicated, or niche protocols.
 In this case, an application at target is the system, since it is non-changeable and provided by the App Store, for example.

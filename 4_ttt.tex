@@ -32,6 +32,9 @@ The only way for a user to interact with the system is by downloading a CSV-file
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
 
+
+
+
 \subsection{General Design}
 \label{sec:TreeTalker:design}
 % System: Alle TreeTalker, Ziel: Daten generieen und sie verfügbar machen
@@ -47,8 +50,9 @@ With the insights gathered by our analysis we were able to fully replace and imp
     \label{fig:MechanismInterceptionTTT}
 \end{figure}
 
-Based on the the architecture described in \ref{sec:design}, this scenario contains the following components:
-a) The \textit{system}, in this case, is a swarm of deployed TreeTalkers in a forest, its goal is the collection of accurate environmental data and to make it available to users.
+The system in this case study is a swarm of deployed TreeTalkers in a forest,
+surrounded by the 
+% , its goal is the collection of accurate environmental data and to make it available to users.
 b) As for the \textit{environment}, it takes the shape of a forest-wide LoRa network which serves as gateway to connect the TreeTalker swarm to the internet.
 It receives the TreeTalker's data via LoRa and can both process it and relay it onwards to other systems on the internet via a variety of mechanisms, such as WiFi, LTE, 5G or satellite uplink.
 c) The \textit{mechanism}, which allows the TreeTalker swarm to talk to the system, is LoRa.
