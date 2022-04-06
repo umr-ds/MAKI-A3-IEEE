@@ -23,12 +23,12 @@ The TTCloud's command message contains 4 types for influencing the TreeTalker's 
 Lastly, we have the \textit{time slot} and \textit{slot length}.
 These values govern the time that the device will wait between measurements and sending measurement data, it appears that these two values are simply multiplied to get the time-to-wait before transmitting.
 
-In normal operation with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
+In normal operation with the TTcloud, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
 The time slot length will also be the same for all nodes, while the gateway will assign each TreeTalker a unique time slot as a result of using LoRa and not LoRa-WAN.
 % Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the TreeTalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
 % For this reason, there is also no way for a TreeTalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
 Finally, the system has no interactivity.
-The only way for a user to interact with the system is by downloading a CSV-file containing the measurement data from the vendor's web server.
+The only way for a user to access the collected data is by downloading a CSV-file containing the measurement data from the vendor's web server.
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
 
@@ -51,20 +51,22 @@ With the insights gathered by our analysis we were able to fully replace and imp
 \end{figure}
 
 The system in this case study is a swarm of deployed TreeTalkers in a forest,
-surrounded by the forest-wide LoRa network 
+surrounded by the forest-wide LoRa network serving as a gateway to connect the TreeTalkers to the Internet as the environment.
+The mechanism used by the TreeTalkers is LoRa.
+Finally, the proposed \ttt forms the interceptor.
 % , its goal is the collection of accurate environmental data and to make it available to users.
-b) As for the \textit{environment}, it takes the shape of a forest-wide LoRa network which serves as gateway to connect the TreeTalker swarm to the internet.
-It receives the TreeTalker's data via LoRa and can both process it and relay it onwards to other systems on the internet via a variety of mechanisms, such as WiFi, LTE, 5G or satellite uplink.
-c) The \textit{mechanism}, which allows the TreeTalker swarm to talk to the system, is LoRa.
-d) \textit{\ttt} is the \textit{interceptor}.
-It replaces the vendor locked TTCloud, communicates with the TreeTalker swarm via LoRa, and ultimately allows users to access the data in a more convenient format.
+% b) As for the \textit{environment}, it takes the shape of a forest-wide LoRa network which serves as gateway to connect the TreeTalker swarm to the internet.
+% It receives the TreeTalker's data via LoRa and can both process it and relay it onwards to other systems on the internet via a variety of mechanisms, such as WiFi, LTE, 5G or satellite uplink.
+% c) The \textit{mechanism}, which allows the TreeTalker swarm to talk to the system, is LoRa.
+% d) \textit{\ttt} is the \textit{interceptor}.
+It replaces the TTCloud, communicates with the TreeTalker swarm via LoRa, and ultimately allows users to access the data in a more convenient format.
 Furthermore, it enhances the functionality of the system as a whole by introducing anomaly detection and therefore improve the quality of the collected data.
-e) This approach is \textit{unobtrusive}, since the TreeTalkers are unable to distinguish between a first-party TTCloud and \ttt.
+This approach is unobtrusive, since the TreeTalkers are unable to distinguish between the original TTCloud and \ttt.
 
 Our network architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the TreeTalker swarm, and only has data on its directly connected sensors-nodes.
-The second, centralized ''aggregator'' instance on the backend, has global knowledge of all nodes in the network.
+The second, centralized aggregator instance on the backend, has global knowledge of all nodes in the network.
 
-When the local decision engine receives a packet, it both stores the data locally and also sends it onwards to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
+When the local decision engine receives a packet, it both stores the data locally and also forwards it to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
 These are then distributed to all stations.
 When it generates a reply packet, the local decision engine performs a statistical evaluation on the node's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
 If it detects an anomaly, it may require the TreeTalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
