@@ -1,2 +1,29 @@
 \section{Conclusion}
 \label{sec:conclusion}
+
+We presented \emph{\mm}, a novel approach providing a model to implement unobtrusive functional additions to or modifications of an existing networked system without touching any proprietary components.
+By classifying a networked system into the \emph{system}, i.e., components containing proprietary or other not changeable parts, and the \emph{environment}, i.e., components containing modifiable parts under control, 
+behavioral changes are achieved by mechanism-enhancing yet unobtrusive \emph{interceptors},
+i.e., a layer that is introduced between environment and system adding or updating mechanisms.
+Such an interceptor can have many forms like an updated software library, a newly deployed edge device, or an enhanced cloud service.
+Interceptors must be unobtrusive to avoid disrupting or even breaking applications but still provide added or modified mechanisms to the networked systems.
+
+We illustrate this approach by applying the findings of the model in two case studies
+that show its real-world applicability.
+First, we unobtrusively replace a cloud infrastructure by an edge infrastructure in a wireless sensor network.
+Second, we unobtrusively add a vertical handover mechanism between Wi-Fi and LTE to a mobile end device without disconnecting TCP sessions.
+Our results indicate that \mm is a compelling approach to achieve improved service quality and provide previously unavailable functionality in an unobtrusive manner.
+
+The contributions of this paper are:
+\begin{itemize}
+    \item We present \mm, a model that can be used by developers to design and implement unobtrusive mechanism interceptors.
+    \item We present two examples, NAT and Wine, which serve as a basis for developing the \mm model.
+    \item We present an application, \ttt, where our model is applied to replace a cloud infrastructure by an edge infrastructure to unobtrusively add previously unavailable functionality in a sensor network.
+    \item We present an application, where our model is applied to add an unobtrusive vertical handover mechanism between Wi-Fi and LTE and thereby improve service quality of mobile devices.
+\end{itemize}
+
+The remainder of this paper is organized as follows.
+Section~\ref{sec:releted_work} presents related work.
+Section~\ref{sec:design} introduces two real-world examples and the derived model for \mm.
+Section~\ref{sec:treetalker} presents the first case-study, \ttt and Section~\ref{sec:wg:impl} presents the second case-study, \wgh.
+Section~\ref{sec:conclusion} concludes this paper and presents future work.

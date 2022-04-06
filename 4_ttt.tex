@@ -14,6 +14,7 @@ The TTCloud, and its associated TreeTalkers, can be configured via text-messages
 % \footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
 While LoRa-certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN}, which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{TreeTalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
 For this reason, communication with each \textit{TreeTalker} needs to be scheduled manually in such a way that avoids collisions.
+This means that it is not possible to operate a Treetalker network at the same location as a LoRa-WAN network, since the transmissions from these networks will collide.
 
 % In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{TreeTalker's} behavior and network communications, to understand the communication protocol.
 
@@ -23,7 +24,7 @@ The TTCloud's command message contains 4 types for influencing the TreeTalker's 
 Lastly, we have the \textit{time slot} and \textit{slot length}.
 These values govern the time that the device will wait between measurements and sending measurement data, it appears that these two values are simply multiplied to get the time-to-wait before transmitting.
 
-In normal operation with the TTcloud, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
+In normal operation with the TTcloud, the sleep- and heat-time are user-configurable during deployment, and the same for all TreeTalkers attached to the gateway.
 The time slot length will also be the same for all nodes, while the gateway will assign each TreeTalker a unique time slot as a result of using LoRa and not LoRa-WAN.
 % Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the TreeTalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
 % For this reason, there is also no way for a TreeTalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
@@ -32,7 +33,7 @@ The only way for a user to access the collected data is by downloading a CSV-fil
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
 
-
+By intercepting
 
 
 \subsection{General Design}
@@ -45,9 +46,9 @@ With the insights gathered by our analysis we were able to fully replace and imp
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{figures/MechanismInterceptionTTT.pdf}
-    \caption{The system architecture for the TreeTalker scenario with interceptor, system and environment as introduced by figure \ref{sec:design}}
-    \label{fig:MechanismInterceptionTTT}
+    \includegraphics[width=\linewidth]{figures/model_TTT.pdf}
+    \caption{The system architecture for the TreeTalker scenario with interceptor, system and environment as introduced by figure~\ref{fig:model}}
+    \label{fig:model_TTT}
 \end{figure}
 
 The system in this case study is a swarm of deployed TreeTalkers in a forest,
@@ -68,7 +69,7 @@ The second, centralized aggregator instance on the backend, has global knowledge
 
 When the local decision engine receives a packet, it both stores the data locally and also forwards it to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
 These are then distributed to all stations.
-When it generates a reply packet, the local decision engine performs a statistical evaluation on the node's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
+When generating a reply packet, the local decision engine performs a statistical evaluation of the respective treetalker's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
 If it detects an anomaly, it may require the TreeTalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
 
 In order to make meaningful decisions, concept recognition is necessary.
@@ -83,16 +84,16 @@ Due to the minor costs on battery and data transmission over Lora, even a 20\% i
 \subsubsection{Response Time}
 \label{sec:evaluation:response-time}
 
-The protocol employed by the TreeTalker is a simple two-way exchange of data, where the TreeTalker will send measurements to the associated cloud and wait for new configuration parameters.
+The protocol employed by the TreeTalker is a simple two-way exchange of data, where the TreeTalker will send measurements to the associated TTCloud and wait for new configuration parameters.
 If it does not receive a response to its data packet after a certain time, it assumes that the cloud is offline and falls back to repeating the message ad-infinitum.
 Thus, in order to be a viable alternative to the first-party TTCloud, the \ttt needs to be able to respond to each received data-packet within reasonable time.
 
-In order to compare the response time of our system versus the TTCloud, we used a test-setup of a single TreeTalker, in combination with a passive sniffing node, which recorded all LoRa-traffic.
+In order to compare the response time of our system versus the TTCloud, we used a experiment setup of a single TreeTalker, in combination with a passively sniffing node to recorded the LoRa-traffic for further analysis.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figures/response_times.pdf}
-    \caption{Response time of both the first-party \textit{TTCloud}, as well as \textit{\ttt}.}
+    \caption{Response time of both the first-party \textit{TTCloud}, as well as \textit{\ttt}}
     \label{fig:response_times}
 \end{figure}
 
@@ -135,7 +136,7 @@ This fault had previously not been noticed by the operator and could have wrough
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figures/TTT_position_data_smallest.png}
-    \caption{Erratic data from the deployed TreeTalker in the Marburg Open Forest.}
+    \caption{Erratic data from the deployed TreeTalker in the Marburg Open Forest}
     \label{fig:ttt_position_error}
 \end{figure}
 
