@@ -5,7 +5,7 @@ The use of UDP for communication eliminates the problem of TCP connection losses
 % Once an initial handover is complete, WireGuard sends the UDP datagrams over the new connection without the TCP connection tunneled through the WireGuard VPN noticing.
 % To realize our approach the WireGuard software needs to be installed on the system, which can either be done as a kernel module or, if no kernel module is available (e.g., for non-Linux based systems or the kernel of the system can not be modified) as a platform-independent user space version.
 % For this approach both alternative are possible.
-For the WireGuard tunnel to work, an additional tunnel endpoint somewhere in the network is required, at which the WireGuard tunnel is terminated and the encapsulated TCP connection further relayed to the original destination.
+For the WireGuard tunnel to work, an additional tunnel endpoint somewhere in the network is required, where the WireGuard tunnel is terminated and the encapsulated TCP connection further relayed to the original destination.
 
 The use of WireGuard alone does not automatically enable existing TCP-based applications to support handovers.
 Rather, they have to be instructed to transfer their data over the WireGuard connection.

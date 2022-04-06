@@ -47,23 +47,22 @@ Further, we modeled a Wi-Fi access point (Wi-Fi AP on the left) and a correspond
 On the bottom right in Fig.~\ref{fig:eval:mig:topo}, the LTE access network (LTE AN) was modeled.
 % to match current LTE speeds of about 100 MBit/s.
 % The LTE AN is connected to a LTE router.
-In the middle of the topology, a router was modeled to mimic the backbone of the network, i.e., the network of an ISP connecting multiple parts of the Internet.
-The second node from the top is the WireGuard endpoint, that is used to terminate the TCP/Tunnel/IP mechanism.
+In the middle of the topology, we modeled a router to mimic the backbone of the network, i.e., the network of an ISP connecting multiple parts of the Internet.
+The second node from the top is the WireGuard endpoint, which is used to terminate the TCP/Tunnel/IP mechanism.
 % From this node, the arriving encapsulated TCP connection from the client is extracted and relayed to the server and TCP-packets from the server encapsulated and transmitted using WireGuard to the client.
 % The WireGuard endpoint node also acts as a regular backbone router in experiments not using the WireGuard tunnel.
-Finally, the server node is modeled (top), which only contains the application's server.
+Finally, the last node is the server (top), which only contains the application's server.
 
 % The red connections in Fig.~\ref{fig:eval:mig:topo} represent wired connections between the corresponding nodes.
 % The connection between the Wi-Fi router and the backbone router is modeled to mimic a standard uplink that can be found in homes with 100 MBit/s.
 % The other wired connections are using links of multiple GBit/s, which are however not relevant as the limiting links are the LTE AN connection and the connection between the Wi-Fi router and backbone router.
 
 % \paragraph{Applications}
-In order to simulate a TCP-based application, iPerf3\footnote{\url{https://iperf.fr}} was used.
+In order to simulate a TCP-based application, we used iPerf3\footnote{\url{https://iperf.fr}}.
 iPerf3 is an open-source tool for measuring network throughput in IP network following the client-server paradigm and supports various transport layer protocols.
 % The server node in the evaluation topology runs an iPerf3 server, whereas the client node runs the iPerf3 client.
 The client initiates the connection to the server upon experiment start using the currently active connection, i.e., Wi-Fi if available, otherwise LTE.
-Each experiment was executed for 120 seconds in total,
-whereas the first 50 seconds are used to allow the emulation establish routes throughout the network.%, so that packets can be routed from client to server and back again.
+Each experiment was executed for 120 seconds in total, wherein the first 50 seconds are used to allow the emulation establish routes throughout the network.%, so that packets can be routed from client to server and back again.
 After that, iPerf is started and the movement runs for 60 seconds.
 The last 10 seconds are used to tear down the emulation.
 In addition to the presented handover-approach, we also conducted experiments without the TCP/Tunnel/IP mechanism, using the regular routing mechanisms of the Linux kernel to be able to compare the achievements of our approach.
@@ -80,16 +79,16 @@ As can be seen in both scenarios, the proposed approach for using WireGuard to e
 Especially in the arriving scenario, the throughput of the iPerf application does not drop at all.
 Without the TCP/Tunnel/IP mechanism, throughput decreases because the iPerf or, in particular, the TCP connection is not re-established after the connection is changed.
 In the leaving scenario, a small throughput degredation is visible at around 25 seconds.
-This is due to the fact that the Wi-Fi connection is lost immediately, resulting in a short connection drop until the kernel recognizes the lost connection and propagates the changes to the routing tables.
-In the arriving scenario, however, this drop is not visible since the LTE connection does not break but rather the Wi-Fi connection is established in parallel.
+This is due to the Wi-Fi connection being lost immediately, resulting in a short connection drop until the kernel recognizes the lost connection and propagates the changes to the routing tables.
+In the arriving scenario, however, this drop is not visible since the LTE connection does not break, but rather the Wi-Fi connection is established in parallel.
 As soon as the kernel detects the new Wi-Fi connection, the TCP/Tunnel/IP mechanism uses the Wi-Fi connection, whereas in the blue graph it is visible, that, although the LTE connection is still available, the TCP connection does not continue due to the newly established Wi-Fi connection.
 
 % \paragraph{Overhead Analysis}
-Although the handover capabilities offer a great improvement for users, the TCP/Tunnel/IP mechanism introduces some kind of overhead because it has to encapsulate the TCP-connection and introduces encryption.
-To quantify this overhead, the CPU usage of both the kernel and the iPerf process was monitored, which can be seen in Fig.~\ref{fig:eval:mig:cpu}.
+Although the handover capabilities offer a great improvement for users, the TCP/Tunnel/IP mechanism introduces some overhead because it has to encapsulate the TCP-connection and introduces encryption.
+To quantify this overhead, we monitored the CPU usage of both the kernel and the iPerf process, which can be seen in Fig.~\ref{fig:eval:mig:cpu}.
 Fig.~\ref{fig:eval:mig:cpu} is composed the same way as Fig.~\ref{fig:eval:mig:network}.
-The y-axis, however, denotes the CPU utilization of the client node.
-Further, the solid graphs show the kernel's CPU usage, while the graphs with markers show the CPU utilization of iPerf.
+The y-axis denotes the CPU utilization of the client node.
+Furthermore, the solid graphs show the kernel's CPU usage, while the graphs with markers show the CPU utilization of iPerf.
 First, the iPerf CPU usage does not differ significantly, regardless of the scenario and whether the WireGuard based handover mechanism is used.
 The kernel, however, shows quite a different result.
 On the one hand, the blue graphs, i.e., without the TCP/Tunnel/IP mechanism, show that the kernel's CPU utilization is relatively constant at around 1\% for the entire experiment.
