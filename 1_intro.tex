@@ -1,27 +1,21 @@
 \section{Introduction}
 \label{sec:intro}
 
-
-
-
-
-
-
-Modern networked systems are based on hardware and software components that have a communicative relationship with each other to enable applications, be it a network interface, or a system call to write data to disc.
+Modern networked systems are based on hardware and software components that have a communicative relationship with each other to enable applications, be it a network interface, or a system call to write data to disk.
 However, many of these components are outdated or lack functionality that do not optimally enable communication between the components for a given situation.
 If these components are proprietary and the manufacturer is not willing or able to add a certain function or update a component, users often have no choice but to accept the non-optimal functioning of the networked system.
 There can be various, even legitimate, reasons why manufacturers do not update a component.
 Besides simple business reasons, such as a lack of or insufficient monetization of deprecated components, technical hurdles such as missing infrastructure can also be a problem.
 Long and costly standardization and deployment processes can also hinder or slow down the updating of components, which is not only a problem of proprietary components.
 
-To overcome this problem, developers, companies and organizations use already use abstractions and work-arounds to add or modify functionality to/of existing networked systems or applications without touching any proprietary components by adding mechanisms that intercept and modify the communications between the component and its environment.
+To overcome this problem, developers, companies and organizations already use abstractions and work-arounds to add or modify functionality to/of existing networked systems or applications without touching the proprietary components by adding mechanisms that intercept and modify the communications between the component and its environment.
 As an example, due to the relative low number of available IPv4 addresses network developers introduced Network Address Translation (NAT), where a gateway intercepts IP packets and modifies translates the IP addresses between private and public addresses.
 Another example is Wine, that allows executing Windows applications on Unix-like operating systems by intercepting the applications Windows system calls and translating them to the corresponding POSIX system calls.
 
 We argue that such approaches are not exceptions or simple work-arounds but can be found throughout modern networked systems.
 We even argue that such approaches are essential to modern networked systems to provide fast, widely used improvements of existing systems.
 However, until now, there is no model that can be used by developers to systematically identify possible starting points and implement such intercepting layers between two communicating components.
-Therefore, we present \emph{\mm}, a novel approach providing a model to implement unobtrusive functional additions or modifications to or of an existing networked system or application without touching any proprietary components.
+Therefore, we present \emph{\mm}, a novel approach providing a model to implement unobtrusive functional additions to or modifications of an existing networked system without touching any proprietary components.
 By classifying a networked system into the \emph{system}, i.e., components containing proprietary or other not changeable parts, and the \emph{environment}, i.e., components containing modifiable parts under control, 
 behavioral changes are achieved by mechanism-enhancing yet unobtrusive \emph{interceptors},
 i.e., a layer that is introduced between environment and system adding or updating mechanisms.
@@ -29,8 +23,7 @@ Such an interceptor can have many forms like an updated software library, a newl
 Interceptors must be unobtrusive to avoid disrupting or even breaking applications but still provide added or modified mechanisms to the networked systems.
 
 We illustrate this approach by applying the findings of the model in two case studies
-that 
-show its real-world applicability.
+that show its real-world applicability.
 First, we unobtrusively replace a cloud infrastructure by an edge infrastructure in a wireless sensor network.
 Second, we unobtrusively add a vertical handover mechanism between Wi-Fi and LTE to a mobile end device without disconnecting TCP sessions.
 Our results indicate that \mm is a compelling approach to achieve improved service quality and provide previously unavailable functionality in an unobtrusive manner.
@@ -39,58 +32,12 @@ The contributions of this paper are:
 \begin{itemize}
     \item We present \mm, a model that can be used by developers to design and implement unobtrusive mechanism interceptors.
     \item We present two examples, NAT and Wine, which serve as a basis for developing the \mm model.
-    \item We present an application, where our model is applied to replace a cloud infrastructure by an edge infrastructure to unobtrusively add previously unavailable functionality.
-    \item We present an application, where our model is applied to add a
+    \item We present an application, \ttt, where our model is applied to replace a cloud infrastructure by an edge infrastructure to unobtrusively add previously unavailable functionality in a sensor network.
+    \item We present an application, where our model is applied to add an unobtrusive vertical handover mechanism between Wi-Fi and LTE and thereby improve service quality of mobile devices.
 \end{itemize}
 
-
-
-% In  our daily life, most devices that we use require communication. 
-% This can be a smartphone, a smart light bulb, the car radio, or many others.
-% Nearly all these devices have a communications interface, be it a network interface, or a system call to write data to disc. 
-% A system without communication is nearly useless in most cases. 
-% However, communication systems are not only increasingly used in private life, but also in all conceivable professional areas; for example in industry, computer-supported applications have become indispensable.  
-% This increased and long term use of interconnected systems raises the question of how they can be supplied with updates over time. 
-% With open source applications and open source operating systems this may work for experienced users, but for proprietary applications, components or systems this is only possible through the manufacturers.
-% Especially in the industry, where special-purpose systems are the norm, many devices exist that have this dependence on manufacturers. 
-% But there are also many other areas were proprietary software, components, and systems dominate the market.
-% As long as the vendor is willing and able to provide the systems with updates, the hardware and software components may continue to be supplied with innovations, but if not, then the systems are frozen at their level of functionality. 
-% Thus, the scope of functionality depends solely on the will of the manufacturers.
-% Also, new challenges, such as security and the introduction of new technologies, often lead to new mechanism\footnote{By a mechanism, we refer to the concrete implementation of a functional unit that is used by the system to achieve its task} not being transferred to all hardware and software components. 
-% This leads to these systems becoming legacy more quickly than would be necessary. 
-
-% In particular, network systems and applications employ many non-proprietary protocols that should be more interchangeable andvielleicht wollen wir diese absätze auch einfach streichen-  extensible by design. 
-% But the protocols used in networked systems today have been standardized over a long period of time and implemented in operating systems and devices by vendors.
-% Much of the internet traffic is based on TCP  \cite{A3:john2007analysis}, which is standardized by the IETF and requires a lengthy process to integrate new mechanisms\cite{A3:de2019pluginizing}. 
-% For example, an approach has been presented in the literature that adds network coding to TCP \cite{A3:sundararajan2011network}. 
-% These new mechanisms are only useful if they are widely adopted and both sender and receiver have this extension. 
-% Another way would be to publish a new protocol with the new mechanisms instead of extend a existing protocol, but the problem remains the same. 
-% This creates a fundamental problem: vendors who switch to a new standard or extensions early on have hardly any competitive advantages, but without advantages of their own, hardly any vendor will switch.
-% This means that it takes longer to achieve substantial market penetration, as a certain critical mass of users must be exceeded. 
-
-% Furthermore, this is only one level at which this problem occurs; the same is true for special parts of communication protocols like congestion control or even whole network concepts like DTN, or entire transmission technologies. 
-% All these technologies have the problem, that enough systems have to be accessible for the new mechanism to take advantage of the usage. 
-% This is also true for mechanisms that should be used for security reasons but are not available in legacy or unmodifiable systems. 
-% Here, the \mm can contribute to the security of systems by making these security mechanisms available.
-
-% In order to enable the transition capability of networked systems and proprietary hardware/software in practice, bringing new mechanisms to this systems must be achieved in as many cases as possible. 
-% To maximize the benefit for early adopters, a method to get new mechanisms to legacy devices called \mm seems to be promising.
-% On the one hand, a \mm on the operating-system-level could be a good way to break this blocking point, by intercepting communication and integrating new mechanisms into legacy apps, and supporting new mechanisms os wide.
-% In this case the apps are our target system for our \mm and the os is our environment where we can unobtrusivly intercept an app's communication.
-% On the other hand, the network itself could wrap non-changeable legacy devices, to enable usage of new technologies without modifications. 
-% In this example our environment for \mm clearly is the network itself and with this environment we bring new mechanisms to the target system by \mm. 
-
-Our contributions are:
-
-\begin{itemize}
- \item A concept to break the innovation blocking point of gaining nearly no benefits for the vendor/user, by intercepting communication and integrating new mechanisms.
- \item A concept to bring new mechanisms to proprietary hardware/software components
- \item Two case studies to show the feasibility of our concept 
-\end{itemize}
-
-The paper is organized as follows. 
-Section~\ref{sec:releted_work} discusses related work.
-In Section~\ref{sec:design}, the concept and design of unobtrusive \mm are presented.
-Section \ref{sec:treetalker} describes the first case study with out \ttt implementation and evaluation. 
-In \ref{sec:wg:impl} our second case study for unobtrusively inserting vertical handovers is presented. 
-Section~\ref{sec:conclusion} concludes the paper and outlines areas of future work.
+The remainder of this paper is organized as follows.
+Section~\ref{sec:releted_work} presents related work.
+Section~\ref{sec:design} introduces two real-world examples and the derived model for \mm.
+Section~\ref{sec:treetalker} presents the first case-study, \ttt and Section~\ref{sec:wg:impl} presents the second case-study, \wgh.
+Section~\ref{sec:conclusion} concludes this paper and presents future work.

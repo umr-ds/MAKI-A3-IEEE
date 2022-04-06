@@ -10,17 +10,17 @@ For the WireGuard tunnel to work, an additional tunnel endpoint somewhere in the
 The use of WireGuard alone does not automatically enable existing TCP-based applications to support handovers.
 Rather, they have to be instructed to transfer their data over the WireGuard connection.
 One way to do this, is to modify the routing table of the system in a way, that all traffic from the host is sent over the tunnel.
-However, this would mean that non-TCP based applications would also be routed through the tunnel, including UDP or QUIC based applications that do not have the problem of missing handover capability.
+However, this would mean that non-TCP based applications would also be routed through the tunnel, including UDP or QUIC based applications that do not have the problem of missing handover capability making the routing table an inappropriate interface for the TCP mechanism.
 % This approach would just add the overhead of WireGuard for these applications without gaining anything.
 % This is where \ld comes into play.
-To mitigate this potential drawbacks, \ld is used.
-The \ld mechanism allows overriding functions of dynamically linked libraries, enabling to override the Sockets API such that only connections of the application started with our \ld modifications are using the WireGuard tunnel.
+To mitigate this potential drawback, \ld is used.
+The \ld mechanism allows intercepting functions of dynamically linked libraries, enabling to intercept the Sockets API such that only connections of the application started with our \ld modifications are using the WireGuard tunnel.
 Following the model of this paper, the mechanism \emph{TCP/IP} is replaced by the mechanism \emph{TCP/Tunnel/IP}. 
 For this purpose, an interceptor is created that implements the sockets API used by the system, i.e. the application.
 
 The rough procedure is as follows.
 A WireGuard daemon is run on the local system.
-When a program is executed with our interceptor, the TCP packets of this particular application are redirected to the local WireGuard daemon.
+When a program is executed with our interceptor, the TCP packets of this particular application are intercepted and redirected to the local WireGuard daemon.
 The UDP-based WireGuard packets are then sent to the WireGuard endpoint located in the network, which unpacks the encapsulated TCP connection and acts as a relay to forward the application data to the desired destination using conventional TCP/IP mechanisms.
 The responses from the server with which the application is communicating are sent back to the host via the same route, i.e. via the WireGuard tunnel.
 % The exact implementation and configuration will be discussed below.
@@ -58,7 +58,7 @@ The responses from the server with which the application is communicating are se
 
 One of our goals is that only connections of applications using the \ld implementation are routed through the WireGuard tunnel.
 Forwarding traffic of a certain TCP socket to WireGuard is implemented using the \texttt{SO\_BINDTODEVICE} socket option.
-Using this option, the socket is advised to route all traffic that is sent to the given file descriptor using a specific interface, in our case the WireGuard interface.
+Using this option, the socket is advised to route all traffic that is sent to the given file descriptor using a specific network interface, in our case the WireGuard network interface.
 However, this approach comes with the downside that the Linux kernel has a security mechanism called \textit{Reverse Path Filtering (RPF)}, which becomes active.
 To cope with this problem, a second routing table is created for the WireGuard interface.
 If the application's socket is bound to the WireGuard interface, the Linux kernel will still send and route packets via the interface, since an entry exists for this interface in the second table.

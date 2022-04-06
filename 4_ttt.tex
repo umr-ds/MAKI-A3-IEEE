@@ -1,37 +1,33 @@
 \section{\ttt}
-\label{sec:TreeTalker}
+\label{sec:treetalker}
 
-For our first example scenario, we decided to adapt a legacy-device which has been in real-world use for some time.
-We decided on the ''TreeTalker'' platform, which is a product for distributed tree-health monitoring.
+% For the first case study, we decided to adapt a legacy-device which has been in real-world use for some time.
+The \emph{TreeTalker} platform is a product for distributed tree-health monitoring.
 This platform has been in use in many areas in the world for example in Moscow city with 250 TreeTalkers or a cooperation with the Peking University\footnote{\url{https://www.nature4shop.com/our-vision/}}.
 
-The platform vendor sells both the sensor-devices (henceforth simply called \textit{TreeTalker}), as well as a basestation (henceforth called \textit{TTCloud}), which can be used to relay data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
-The ''TreeTalker''-platform is proprietary, and does not give buyers access to the device firmware.
-
+The platform cosists of sensor-devices (henceforth simply called \textit{TreeTalker}), as well as a base station (henceforth called \textit{TTCloud}), which can be used to relay data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
+The TreeTalker-platform is proprietary, and does not give buyers access to the device firmware.
 For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{TreeTalkers}.
 We call the resulting system \ttt.
 
-The TTCloud, and its associated TreeTalkers, can be configured via text-message, also, collected data is sent to the cloud-backend via a mobile data connection\footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
-
-While LoRa-alliance certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN} which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{TreeTalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
-
+The TTCloud, and its associated TreeTalkers, can be configured via text-messages and collected data is sent to the cloud-backend via a mobile data connection using a proprietary call-response protocol, initiated by the TreeTalker.
+% \footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
+While LoRa-certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN}, which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{TreeTalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
 For this reason, communication with each \textit{TreeTalker} needs to be scheduled manually in such a way that avoids collisions.
 
-In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{TreeTalker's} behavior and network communications, to understand the communication protocol.
+% In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{TreeTalker's} behavior and network communications, to understand the communication protocol.
 
-Communication between the TTCloud and its sensor-stations is a call-response-protocol, initiated by the TreeTalker.
-The TTCloud's command message contains 4 fields, with which the TreeTalker's behavior can be influenced.
+The TTCloud's command message contains 4 types for influencing the TreeTalker's behavior.
 \textit{Sleep} is the time that the device will sit idle in between measurements (defaults to 1 hour).
 \textit{Heating Time}, that is how long the TreeTalker will run its internal heater before taking the second set of heat-probe measurements.
 Lastly, we have the \textit{time slot} and \textit{slot length}.
 These values govern the time that the device will wait between measurements and sending measurement data, it appears that these two values are simply multiplied to get the time-to-wait before transmitting.
 
-In normal operation, with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
-The time slot length will also be the same for all nodes, while the gateway will assign each TreeTalker a unique time slot.
-Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the TreeTalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
-For this reason, there is also no way for a TreeTalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
-
-Lastly, when used as intended, the system has no interactivity.
+In normal operation with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
+The time slot length will also be the same for all nodes, while the gateway will assign each TreeTalker a unique time slot as a result of using LoRa and not LoRa-WAN.
+% Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the TreeTalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
+% For this reason, there is also no way for a TreeTalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
+Finally, the system has no interactivity.
 The only way for a user to interact with the system is by downloading a CSV-file containing the measurement data from the vendor's web server.
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
@@ -48,7 +44,7 @@ With the insights gathered by our analysis we were able to fully replace and imp
     \centering
     \includegraphics[width=\linewidth]{figures/MechanismInterceptionTTT.pdf}
     \caption{The system architecture for the TreeTalker scenario with interceptor, system and environment as introduced by figure \ref{sec:design}}
-    \label{fig:evaluation:ttt_response}
+    \label{fig:MechanismInterceptionTTT}
 \end{figure}
 
 Based on the the architecture described in \ref{sec:design}, this scenario contains the following components:
@@ -91,10 +87,10 @@ In order to compare the response time of our system versus the TTCloud, we used 
     \centering
     \includegraphics[width=\linewidth]{figures/response_times.pdf}
     \caption{Response time of both the first-party \textit{TTCloud}, as well as \textit{\ttt}.}
-    \label{fig:evaluation:ttt_response}
+    \label{fig:response_times}
 \end{figure}
 
-As can be seen in figure \ref{fig:evaluation:ttt_response}, the \ttt is capable delivering responses with a similar delay as the TTCloud.
+As can be seen in figure \ref{fig:response_times}, the \ttt is capable delivering responses with a similar delay as the TTCloud.
 The three bars are, from left to right: 1) The total response time of \ttt, including both the time it takes to generate a reply packet, as well as transmitting it via LoRa. 2) The response time of the first-party TTCloud, also including LoRa Transmission. 3) The time it takes \ttt just to generate the reply packet.
 In fact, the actual time it takes to arrive at a decision and craft the reply-package is less than one quarter of the total time, the other three quarters being the time necessary to transmit the packet via LoRa.
 The TTCloud, which does no further processing whatsoever, does have the advantage of only sending the same reply every time, thus not requireing any additional time for computations of any kind.

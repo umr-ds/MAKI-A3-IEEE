@@ -59,7 +59,7 @@ The model derived from the above examples and further observations is shown in F
 
 \subsubsection{System and Environment}
 At the core of the consideration lies a system that is intended to achieve a specific task.
-The system cannot be changed because it contains proprietary components or depends on other external factors, such as high coordination costs for changes due to long standardization or technical hurdles.
+The system or parts of it cannot be changed because it contains proprietary components or depends on other external factors, such as high coordination costs for changes due to long standardization or technical hurdles.
 In the NAT example above, the system is the host that wants to communicate with hosts in other networks.
 
 Every system is surrounded by an environment that provides functionality to be used by the system.
@@ -69,23 +69,18 @@ For example, the host in the NAT example needs the routing functionality of the 
 
 \subsubsection{Mechanism}
 By a mechanism, we mean the implementation of a functional unit of the environment that is used by the system to achieve its task~\cite{frommgen2016mechanism}.
-% By a mechanism, we refer to ''a confined conceptual element of a (networked) system that is bound to a realization as cooperating functional units''~\cite{frommgen2016mechanism}.
-Mechanisms are used by a system via its corresponding interface. 
-Mechanisms are located at various points of hardware/software systems, for example:
+Mechanisms are used by a system via its corresponding interface, whereas the mechansim/interface mapping is not unique.
+For example, the mechanism TCP the interface could be the sockets API or the Wi-Fi connection between two devices.
+Mechanisms and their interfaces are located at various points of hardware/software systems, for example:
 %
 \begin{itemize}
- \item Complete protocols: TCP, UDP, RTP, overlays, etc.
- \item Specific parts of protocols: congestion control, fragmentation, load balancing, replication, etc.
- \item Network concepts: infrastructure-based, ad-hoc, partially meshed, delay tolerant (DTN), etc.
- \item Network technologies: Ethernet, LTE, IEEE 802.11, Bluetooth, etc.
- \item Security mechanisms: encryption, integrity protection, authentication, etc.
- \item System components: positioning (via WLAN, GSM or GPS), sensors, etc.
- \item Operating System APIs: Sockets, Pipes, etc.
- \item System Bus Interfaces: I$^2$C, PCI Express, etc.
+ \item Complete network protocols such as TCP and the socket API as its interface.
+ \item Specific parts of protocols, e.g., load balancing and its HTTP interface.
+ \item Network concepts such as infrastructure-based, ad-hoc, partially meshed, delay tolerant (DTN) and the corresponding Wi-Fi configuration interfaces.
+ \item System components such as sensors and the I$^2$C interface.
 \end{itemize}
-% Vorschlag: Mechanismen und deren Interfaces aufzählen, statt nur die Interfaces.
 %
-In the above NAT example, the mechanism provided by the environment that the systems uses is IP routing.
+In the above NAT example, the mechanism provided by the environment that the systems uses is IP routing and the corresponding networking interface between host and gateway.
 
 
 \subsubsection{Unobtrusive Interceptor}
@@ -93,12 +88,12 @@ In the field of software engineering, the ``Interceptor architectural pattern al
 In this programming pattern, a framework provides interfaces so that programs using the framework can transparently intervene in the flow of data at specific events.
 While the goal of our interceptor is basically the same, to transparently intervene in the data flow and thus enable new functionalities, the perspective is reversed.
 An interceptor in our definition is part of the environment and provides mechanisms to the system via known interfaces. 
-In contrast to the interceptor pattern of software engineering, the interceptor is used by the system but configured by the environment in a way that makes its mandatory.
+In contrast to the interceptor pattern of software engineering, the interceptor is used by the system but configured by the environment in a way that makes it inevitable.
 In order for the system to use the new mechanism, the interceptor is inserted between the system and the mechanism and changes the data flow.
 The used mechanism can also be introduced into the environment as part of the interceptor and does not have to exist a priori.
 In the above NAT example, the newly added mechanism is IP masquerading as part of the NAT.
 The NAT component intervenes with the IP data flow in a way that translates the internal, private IP addresses and TCP/UDP ports with the public IP address and vice-versa.
 
-In order to not influence or even disturb the actual task of the system, the mechanism must be unobtrusively replaced by the provided mechanism of the interceptor.
+In order to not influence or even disturb the actual task of the system, the existing mechanism must be unobtrusively replaced by the provided mechanism of the interceptor.
 The system must not notice the change of the mechanism, on the contrary the used interfaces must pretend that the original mechanism is still in place.
 Furthermore, an interceptor must be unobtrusive so that the system can continue to fulfill the functionality and not provide error cases for the termination.
