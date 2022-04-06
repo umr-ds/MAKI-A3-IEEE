@@ -1,72 +1,73 @@
 \section{\ttt}
-\label{sec:treetalker}
+\label{sec:TreeTalker}
 
-To demonstrate the power of the network-side adaption, we decided to adapt a legacy-device which has been in real-world use for some time.
-We decided on the ''Treetalker'' platform\footnote{\url{https://www.nature4shop.com/}}, which is a product for distributed tree-health monitoring.
-This platform has been in use in many areas in the world for example in Moscow city with 250 TreeTalkers or a cooperation with the Peking University. \footnote{https://www.nature4shop.com/our-vision/}
+For our first example scenario, we decided to adapt a legacy-device which has been in real-world use for some time.
+We decided on the ''TreeTalker'' platform, which is a product for distributed tree-health monitoring.
+This platform has been in use in many areas in the world for example in Moscow city with 250 TreeTalkers or a cooperation with the Peking University\footnote{\url{https://www.nature4shop.com/our-vision/}}.
 
-The platform vendor sells both the sensor-devices (henceforth simply called \textit{Treetalker}), as well as a basestation (henceforth called \textit{TTCloud}), which can be used to aggregate data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
-The ''Treetalker''-platform is proprietary, and does not give buyers access to the device firmware.
+The platform vendor sells both the sensor-devices (henceforth simply called \textit{TreeTalker}), as well as a basestation (henceforth called \textit{TTCloud}), which can be used to relay data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
+The ''TreeTalker''-platform is proprietary, and does not give buyers access to the device firmware.
 
-For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{Treetalkers}.
+For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{TreeTalkers}.
 We call the resulting system \ttt.
 
-The TTCloud, and its associated Treetalkers, can be configured via text-message, also, collected data is sent to the cloud-backend via a mobile data connection\footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
+The TTCloud, and its associated TreeTalkers, can be configured via text-message, also, collected data is sent to the cloud-backend via a mobile data connection\footnote{the operator needs to provide their own SIM-card with a Text-/Data-Plan}
 
-While LoRa-alliance certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN} which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{Treetalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
+While LoRa-alliance certified hardware provides a dedicated network-layer-protocol, called \textit{LoRa-WAN} which deals with collisions, addressing, and other issues resulting from the shared-medium characteristic of LoRa, the \textit{TreeTalker}-vendor decided to forgo this higher-level protocol in favor of using the LoRa-PHY-layer directly.
 
-For this reason, communication with each \textit{Treetalker} needs to be scheduled manually in such a way that avoids collisions.
+For this reason, communication with each \textit{TreeTalker} needs to be scheduled manually in such a way that avoids collisions.
 
-In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{Treetalker's} behaviour and network communications, to understand the communication protocol.
+In order to replace the \textit{TTCloud} with our own gateway, we performed a blackbox-analysis of \textit{TreeTalker's} behavior and network communications, to understand the communication protocol.
 
 Communication between the TTCloud and its sensor-stations is a call-response-protocol, initiated by the TreeTalker.
-The TTCloud's command message contains 4 fields, with which the Treetalker's behaviour can be influenced.
+The TTCloud's command message contains 4 fields, with which the TreeTalker's behavior can be influenced.
 \textit{Sleep} is the time that the device will sit idle in between measurements (defaults to 1 hour).
-\textit{Heating Time}, that is how long the Treetalker will run its internal heater before taking the second set of heat-probe measurments.
+\textit{Heating Time}, that is how long the TreeTalker will run its internal heater before taking the second set of heat-probe measurements.
 Lastly, we have the \textit{time slot} and \textit{slot length}.
 These values govern the time that the device will wait between measurements and sending measurement data, it appears that these two values are simply multiplied to get the time-to-wait before transmitting.
 
-In normal operation, with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all Treetalkers attached to the gateway.
-The time slot length will also be the same for all nodes, while the gateway will assign each Treetalker a unique time slot.
-Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the Treetalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
-For this reason, there is also no way for a Treetalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
+In normal operation, with a vendor-supplied gateway, the sleep- and heat-time are user-configurable, but fixed, and the same for all TreeTalkers attached to the gateway.
+The time slot length will also be the same for all nodes, while the gateway will assign each TreeTalker a unique time slot.
+Again, this is necessary due to the vendor's refusal to use the LoRaWAN-protocol, which includes a mechanism for collision-avoidance, but since the TreeTalker-system uses the raw \textit{LoRaPHY}-layer, the gateway needs to schedule transmission manually.
+For this reason, there is also no way for a TreeTalker-network to coexist with other LoRa-networks in the same area, since collisions would be plenty and unrecoverable.
 
 Lastly, when used as intended, the system has no interactivity.
-The only way for a user to ''interact'' with the system is by downloading a CSV-file containing the measurement data from the vendor's ''cloud'' backend.
+The only way for a user to interact with the system is by downloading a CSV-file containing the measurement data from the vendor's web server.
 
-With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the treetalker-network.
+With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
 
 \subsection{General Design}
-\label{sec:treetalker:design}
-% System: Alle Treetalker, Ziel: Daten generieen und sie verfügbar machen
+\label{sec:TreeTalker:design}
+% System: Alle TreeTalker, Ziel: Daten generieen und sie verfügbar machen
 % Environment: LoRa Gateway (normalerweise TTCloud) -> Internet
 % Mechanism: Lora 
 % Interceptor: TTT + Remote (zusammen ForestEdge)
 % Unobtrusive: TreeTalker soll keinen Unterschied zw. TTC und ForestEdge erkennen können
 
-Based on the ring-model described in \ref{sec:design}, this scenario contains the following components:
-a) The \textit{system}, in this case, is a swarm of deployed Treetalkers in a forest, its goal is the collection of accurate environmental data and to make it available to users.
-b) The \textit{environment} starts with the vendor-supplied TTCloud and communicates with the vendors backend to make the aggregated data available for download.
-Therefore the TTCloud also contains the required internet up-link.
-c) The \textit{mechanism}, which allows the Treetalker swarm to talk to the system, is LoRa.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/MechanismInterceptionTTT.pdf}
+    \caption{The system architecture for the TreeTalker scenario with interceptor, system and environment as introduced by figure \ref{sec:design}}
+    \label{fig:evaluation:ttt_response}
+\end{figure}
+
+Based on the the architecture described in \ref{sec:design}, this scenario contains the following components:
+a) The \textit{system}, in this case, is a swarm of deployed TreeTalkers in a forest, its goal is the collection of accurate environmental data and to make it available to users.
+b) As for the \textit{environment}, it takes the shape of a forest-wide LoRa network which serves as gateway to connect the TreeTalker swarm to the internet.
+It receives the TreeTalker's data via LoRa and can both process it and relay it onwards to other systems on the internet via a variety of mechanisms, such as WiFi, LTE, 5G or satellite uplink.
+c) The \textit{mechanism}, which allows the TreeTalker swarm to talk to the system, is LoRa.
 d) \textit{\ttt} is the \textit{interceptor}.
-It replaces the vendor locked TTCloud, communicates with the Treetalker swarm via LoRa, and ultimately allows users to access the data in a more convenient format.
+It replaces the vendor locked TTCloud, communicates with the TreeTalker swarm via LoRa, and ultimately allows users to access the data in a more convenient format.
 Furthermore, it enhances the functionality of the system as a whole by introducing anomaly detection and therefore improve the quality of the collected data.
-e) This approach is \textit{unobtrusive}, since the Treetalkers are unable to distinguish between a first-party TTCloud and \ttt.
+e) This approach is \textit{unobtrusive}, since the TreeTalkers are unable to distinguish between a first-party TTCloud and \ttt.
 
-%Based on the ring-model described in section \ref{sec:design}, this scenario can be expressed as a 3-ring design.
-%The innermost ring, the Treetalker's \textit{firmware} is unaccessible to us, as are the next two, the \textit{hardware} ring and the \textit{link} ring.
-%This is all due to the Treetalker-platform being a proprietary black-box, and using an equally closed-source LoRa-module for communication.
-%It is therefore only at layer 4, the \textit{network} itself, where we can attach ourselves.
-%The particular \mm we are applying, rather than the insertion of an interring, or modification of an existing ring, is the wholesale replacement of this fourth ring with our own hardware.
-
-Our network architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the Treetalker swarm, and only has data on its directly connected sensors-nodes.
+Our network architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the TreeTalker swarm, and only has data on its directly connected sensors-nodes.
 The second, centralized ''aggregator'' instance on the backend, has global knowledge of all nodes in the network.
 
 When the local decision engine receives a packet, it both stores the data locally and also sends it onwards to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
 These are then distributed to all stations.
 When it generates a reply packet, the local decision engine performs a statistical evaluation on the node's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
-If it detects an anomaly, it may require the Treetalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
+If it detects an anomaly, it may require the TreeTalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
 
 In order to make meaningful decisions, concept recognition is necessary.
 This is done by comparing a long-running, and short-running time-window of the data.
@@ -75,21 +76,21 @@ In general, the preferred decision is to reduce the upcoming measurement interva
 Due to the minor costs on battery and data transmission over Lora, even a 20\% increase in measurements is insignificant for the overall energy consumption. 
 
 \subsection{Evaluation}
-\label{sec:treetalker:evaluation}
+\label{sec:TreeTalker:evaluation}
 
 \subsubsection{Response Time}
 \label{sec:evaluation:response-time}
 
-The protocol employed by the Treetalker is a simple two-way exchange of data, where the treetalker will send measurements to the associated cloud and wait for new configuration parameters.
+The protocol employed by the TreeTalker is a simple two-way exchange of data, where the TreeTalker will send measurements to the associated cloud and wait for new configuration parameters.
 If it does not receive a response to its data packet after a certain time, it assumes that the cloud is offline and falls back to repeating the message ad-infinitum.
-Thus,in order to be a viable alternative to the first-party TTCloud, the \ttt needs to be able to respond to each received data-packet within reasonable time.
+Thus, in order to be a viable alternative to the first-party TTCloud, the \ttt needs to be able to respond to each received data-packet within reasonable time.
 
-In order to compare the response time of our system versus the TTCloud, we used a test-setup of a single Treetalker, in combination with a passive sniffing node, which recorded all LoRa-traffic.
+In order to compare the response time of our system versus the TTCloud, we used a test-setup of a single TreeTalker, in combination with a passive sniffing node, which recorded all LoRa-traffic.
 
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figures/response_times.pdf}
-    \caption{Response time of both the first-party \textit{TTCLoud}, as well as \textit{\ttt}.}
+    \caption{Response time of both the first-party \textit{TTCloud}, as well as \textit{\ttt}.}
     \label{fig:evaluation:ttt_response}
 \end{figure}
 
@@ -105,8 +106,8 @@ This is most likely due to database-queries occasionally taking longer, probably
 \subsubsection{Anomaly Detection}
 \label{sec:evaluation:anomaly-detection}
 
-To evaluate whether the anomaly-detection functions as intended, we drew upon real-world data gathered by a Treetalker-deployment, which was created as part of the \textit{Nature 4.0} project of the University of Marburg.
-This deployment is comprised of 100 Treetalker which were set up in a university-owned parcel of forest and has been continually gathering sensor data for the past 2 years.
+To evaluate whether the anomaly-detection functions as intended, we drew upon real-world data gathered by a TreeTalker-deployment, which was created as part of the \textit{Nature 4.0} project of the University of Marburg.
+This deployment is comprised of 100 TreeTalker which were set up in a university-owned parcel of forest and has been continually gathering sensor data for the past 2 years.
 
 The evaluation was performed by injecting historical data into the policy-engine in chronological order, thus simulating a replay of the 2 year data-gathering-process.
 
@@ -126,8 +127,15 @@ The evaluation was performed by injecting historical data into the policy-engine
 As becomes obvious from table \ref{tab:evaluation:anomalies}, the vast majority of events are produced by the accelerometer, and more specifically by the values denoting the sensor's position.
 
 Further investigation of the data revealed that this seems to be due to a systematical fault in either the installed sensor itself, or the method in which this sensor is queried by the onboard electronics.
-The data reported by the Treetalker for this sensor seems to be completely erratic and entirely unsuited as a basis for further decision-making.
+The data reported by the TreeTalker for this sensor seems to be completely erratic and entirely unsuited as a basis for further decision-making.
 This fault had previously not been noticed by the operator and could have wrought havoc on data analysis performed on the gathered data, but with the aid of \ttt, we were able discover this deficiency before it could impact further decision-making.
 
-In conclusion, by applying our interception-concept to the Treetalker-network, we were able to significantly improve the system's functionality and performance.
-We were also able to leverage behavioral modification to enable interactivity on an otherwise static system, which allowed us to recognise faulty sensors and prevent corrupted data from derailing other research projects.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/TTT_position_data_smallest.png}
+    \caption{Erratic data from the deployed TreeTalker in the Marburg Open Forest.}
+    \label{fig:ttt_position_error}
+\end{figure}
+
+In conclusion, by applying our interception-concept to the TreeTalker-network, we were able to significantly improve the system's functionality and performance.
+We were also able to leverage behavioral modification to enable interactivity on an otherwise static system, which allowed us to recognize faulty sensors and prevent corrupted data from derailing other research projects.

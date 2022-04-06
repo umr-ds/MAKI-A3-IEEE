@@ -1,4 +1,4 @@
-\subsection{Enveloping Applications}
+\subsection{Intercepting Applications}
 The approach presented in this section relies on two building blocks: WireGuard and \ld.
 WireGuard is a simple, fast and secure VPN software that transmits encrypted data encapsulated in UDP datagrams.
 The use of UDP for communication eliminates the problem of TCP connection losses during handovers since neither UDP nor WireGuard is connection-oriented.
@@ -14,11 +14,13 @@ However, this would mean that non-TCP based applications would also be routed th
 % This approach would just add the overhead of WireGuard for these applications without gaining anything.
 % This is where \ld comes into play.
 To mitigate this potential drawbacks, \ld is used.
-The \ld mechanism allows overriding functions of dynamically linked libraries, enabling to override the socket API of Linux such that only connections of the application started with our \ld modifications are using the WireGuard tunnel.
+The \ld mechanism allows overriding functions of dynamically linked libraries, enabling to override the Sockets API such that only connections of the application started with our \ld modifications are using the WireGuard tunnel.
+Following the model of this paper, the mechanism \emph{TCP/IP} is replaced by the mechanism \emph{TCP/Tunnel/IP}. 
+For this purpose, an interceptor is created that implements the sockets API used by the system, i.e. the application.
 
 The rough procedure is as follows.
 A WireGuard daemon is run on the local system.
-When a program is executed with our modifications, the TCP packets of this particular application are redirected to the local WireGuard daemon.
+When a program is executed with our interceptor, the TCP packets of this particular application are redirected to the local WireGuard daemon.
 The UDP-based WireGuard packets are then sent to the WireGuard endpoint located in the network, which unpacks the encapsulated TCP connection and acts as a relay to forward the application data to the desired destination using conventional TCP/IP mechanisms.
 The responses from the server with which the application is communicating are sent back to the host via the same route, i.e. via the WireGuard tunnel.
 % The exact implementation and configuration will be discussed below.
