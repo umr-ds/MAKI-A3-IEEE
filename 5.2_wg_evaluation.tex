@@ -24,34 +24,39 @@ Here, the handover is performed from Wi-Fi to LTE.
 The second scenario (S2) simulates the corresponding handover from LTE to Wi-Fi, e.g., when entering a building providing a Wi-Fi connection.
 In order to perform these experiments, the \emph{Common Open Research Emulator (CORE)}\footnote{\url{https://coreemu.github.io}} was used, that allows execution of arbitrary programs in an emulated Linux environment.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=.9\columnwidth]{figures/migration/topo.png}
-    \caption{Simulated topology used for the evaluation}
-    \label{fig:eval:mig:topo}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=.9\columnwidth]{figures/migration/topo.png}
+%     \caption{Simulated topology used for the evaluation}
+%     \label{fig:eval:mig:topo}
+% \end{figure}
 
 % \paragraph{Topology}
-Fig.~\ref{fig:eval:mig:topo} shows the topology used for the evaluation.
+% Fig.~\ref{fig:eval:mig:topo} shows the topology used for the evaluation.
 % Within the emulation, the following nodes were modeled.
 % First, a mobile client node is required, which is the bottom node in Fig.~\ref{fig:eval:mig:topo}.
-The client (bottom) contains the TCP-based application that shall be intercepted and enabled with handover capabilities and the WireGuard client.
+Within the emulation, the following nodes were modeled: Client, Wi-Fi Access Point, LTE access network (LTE AN), Backbone Router, WireGuard Gateway and Application Backend.
+The client contains the TCP-based application that shall be intercepted and enabled with handover capabilities and the WireGuard client.
 Further, the client node is the only node moving throughout the emulation.
-In S1, the client moves from left to right (blue arrow) and loses the Wi-Fi connection roughly in the middle of the movement range. 
-In S2, the node moves from right to left (red arrow) and regains the Wi-Fi connection at the same position.
+In S1, the client moves and loses the Wi-Fi connection roughly in the middle of the movement range. 
+In S2, the node moves and regains the Wi-Fi connection at the same position.
 The LTE connection is available throughout the entire experiment, whereby the Wi-Fi connection is prioritized if available.
 The mobility is modeled in a way to simulate human walking, i.e., 5 to 6 km/h.
-Further, we modeled a Wi-Fi access point (Wi-Fi AP on the left) and a corresponding Wi-Fi router.
+The network topology is modeled as follows: 
+The Wi-Fi Access Point and LTE AN are connected to the Backbone.
+The Application Server is connected to the WireGuard Gateway, which is indeed connected to the Backbone.
+% Further, we modeled a Wi-Fi access point and a corresponding Wi-Fi router, as well as an LTE access network (LTE AN), both connected to a Backbone Router.
 % The client is connected to the Wi-Fi AP, which in turn uses the Wi-Fi router to route traffic.
 % We modeled the Wi-Fi AP to match the IEEE 802.11ac standard, i.e., roughly 1 Gbit/s throughput.
-On the bottom right in Fig.~\ref{fig:eval:mig:topo}, the LTE access network (LTE AN) was modeled.
+% On the bottom right in Fig.~\ref{fig:eval:mig:topo}, the LTE access network (LTE AN) was modeled.
 % to match current LTE speeds of about 100 MBit/s.
 % The LTE AN is connected to a LTE router.
-In the middle of the topology, we modeled a router to mimic the backbone of the network, i.e., the network of an ISP connecting multiple parts of the Internet.
-The second node from the top is the WireGuard endpoint, which is used to terminate the TCP/Tunnel/IP mechanism.
+% In addition to this, we modeled a router to mimic the backbone of the network, i.e., the network of an ISP connecting multiple parts of the Internet.
+% Finally, a WireGuard endpoint is connected to the Backbone and another modeled instance, namely the Application Server.
+% The second node from the top is the WireGuard endpoint, which is used to terminate the TCP/Tunnel/IP mechanism.
 % From this node, the arriving encapsulated TCP connection from the client is extracted and relayed to the server and TCP-packets from the server encapsulated and transmitted using WireGuard to the client.
 % The WireGuard endpoint node also acts as a regular backbone router in experiments not using the WireGuard tunnel.
-Finally, the last node is the server (top), which only contains the application's server.
+% Finally, the last node is the server (top), which only contains the application's server.
 
 % The red connections in Fig.~\ref{fig:eval:mig:topo} represent wired connections between the corresponding nodes.
 % The connection between the Wi-Fi router and the backbone router is modeled to mimic a standard uplink that can be found in homes with 100 MBit/s.
@@ -63,7 +68,7 @@ iPerf3 is an open-source tool for measuring network throughput in IP network fol
 % The server node in the evaluation topology runs an iPerf3 server, whereas the client node runs the iPerf3 client.
 The client initiates the connection to the server upon experiment start using the currently active connection, i.e., Wi-Fi if available, otherwise LTE.
 Each experiment was executed for 120 seconds in total, wherein the first 50 seconds are used to allow the emulation establish routes throughout the network.%, so that packets can be routed from client to server and back again.
-After that, iPerf is started and the movement runs for 60 seconds.
+After that, iPerf is started and the client starts moving for 60 seconds.
 The last 10 seconds are used to tear down the emulation.
 In addition to the presented handover-approach, we also conducted experiments without the TCP/Tunnel/IP mechanism, using the regular routing mechanisms of the Linux kernel to be able to compare the achievements of our approach.
 Each experiment was repeated five times to reduce effects like race conditions during booting the emulation and other side effects.
@@ -89,7 +94,7 @@ To quantify this overhead, we monitored the CPU usage of both the kernel and the
 Fig.~\ref{fig:eval:mig:cpu} is composed the same way as Fig.~\ref{fig:eval:mig:network}.
 The y-axis denotes the CPU utilization of the client node.
 Furthermore, the solid graphs show the kernel's CPU usage, while the graphs with markers show the CPU utilization of iPerf.
-First, the iPerf CPU usage does not differ significantly, regardless of the scenario and whether the WireGuard based handover mechanism is used.
+The iPerf CPU usage does not differ significantly, regardless of the scenario and whether the WireGuard based handover mechanism is used.
 The kernel, however, shows quite a different result.
 On the one hand, the blue graphs, i.e., without the TCP/Tunnel/IP mechanism, show that the kernel's CPU utilization is relatively constant at around 1\% for the entire experiment.
 In the orange graphs, on the other hand, show an increase of CPU utilization of around 3\% as soon as iPerf starts sending data, which is the same for both scenarios.

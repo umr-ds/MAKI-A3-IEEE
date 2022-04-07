@@ -18,8 +18,15 @@ The \ld mechanism allows intercepting functions of dynamically linked libraries,
 Following the model of this paper, the mechanism \emph{TCP/IP} is replaced by the mechanism \emph{TCP/Tunnel/IP}. 
 For this purpose, an interceptor is created that implements the sockets API used by the system, i.e. the application.
 
-The rough procedure is as follows.
-A WireGuard daemon is run on the local system.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.9\linewidth]{figures/model_TunnelHandover.pdf}
+    \caption{The system architecture for the TunnelHandover approach}
+    \label{fig:model_TunnelHandover}
+\end{figure}
+Figure\ \ref{fig:model_TunnelHandover} presentes the architectural components of the TunnelHandover approach. 
+A WireGuard daemon is run on the operating system, indicated by the black square.
 When a program is executed with our interceptor, the TCP packets of this particular application are intercepted and redirected to the local WireGuard daemon.
 The UDP-based WireGuard packets are then sent to the WireGuard endpoint located in the network, which unpacks the encapsulated TCP connection and acts as a relay to forward the application data to the desired destination using conventional TCP/IP mechanisms.
 The responses from the server with which the application is communicating are sent back to the host via the same route, i.e. via the WireGuard tunnel.
@@ -54,6 +61,7 @@ The responses from the server with which the application is communicating are se
 % If the packet can be forwarded over the interface from which it came, the computer accepts the packet, otherwise it will be dropped.
 % In our case the packet is not routable, because the kernel only looks in the standard routing table, but does not find an entry for the IP address.
 % The solution is to use policy based routing to tell the kernel to look in the second routing table for a specific IP address range, namely that of the WireGuard interface.
+
 
 
 One of our goals is that only connections of applications using the \ld implementation are routed through the WireGuard tunnel.

@@ -4,9 +4,10 @@
 % For the first case study, we decided to adapt a legacy-device which has been in real-world use for some time.
 The \emph{TreeTalker} platform is a product for distributed tree-health monitoring.
 This platform has been in use in many areas in the world for example in Moscow city with 250 TreeTalkers or a cooperation with the Peking University\footnote{\url{https://www.nature4shop.com/our-vision/}}.
+The University of Marburg also currently operates 100 TreeTalkers as part of the \textit{Nature 4.0} research project\footnote{\url{https://www.uni-marburg.de/en/fb19/natur40}}.
 
 The platform cosists of sensor-devices (henceforth simply called \textit{TreeTalker}), as well as a base station (henceforth called \textit{TTCloud}), which can be used to relay data via LoRa and upload it to a proprietary cloud-storage provider via GSM.
-The TreeTalker-platform is proprietary, and does not give buyers access to the device firmware.
+The TreeTalker-platform is proprietary, and does not give buyers access to any hardware or software components.
 For our project, we aimed to replace the static \textit{TTCloud}, with a more versatile gateway, to allow for dynamic reconfiguration of all \textit{TreeTalkers}.
 We call the resulting system \ttt.
 
@@ -33,8 +34,8 @@ The only way for a user to access the collected data is by downloading a CSV-fil
 
 With the insights gathered by our analysis we were able to fully replace and improve the gateway functionality, which allowed us to bring \mm to the TreeTalker-network.
 
-By intercepting
-
+By intercepting and redirecting Treetalker messages, we can increase both the functionality, and reliability of the Treetalker-network.
+We can enable interactivity, where previously the system was static, we can perform statistical analysis on measurement data to find and rectify anomalies by triggering remeasurements, and lastly, we can maximise battery lifetime by adjusting measurement frequency to the remaining battery power.
 
 \subsection{General Design}
 \label{sec:TreeTalker:design}
@@ -64,19 +65,29 @@ It replaces the TTCloud, communicates with the TreeTalker swarm via LoRa, and ul
 Furthermore, it enhances the functionality of the system as a whole by introducing anomaly detection and therefore improve the quality of the collected data.
 This approach is unobtrusive, since the TreeTalkers are unable to distinguish between the original TTCloud and \ttt.
 
-Our network architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the TreeTalker swarm, and only has data on its directly connected sensors-nodes.
+
+Fig. \ref{fig:model_TTT} shows the architecture of the \ttt system.
+Our architecture employs two separate decision making instances, one is located on the physical device in the forest, which communicates directly with the TreeTalker swarm, and only has data on its directly connected sensors-nodes.
+This component is labeled \ttt in the figure; it consists of the actual interceptor, shown in yellow, which includes the LoRa transceiver adn a translation-layer which remarshals the packets and sends them on via MQTT.
+The anomaly-detection checks if a measurement seems reasonalbe, and if it passes, the packet is transmitted onward via a number of different communication technologies.
+
 The second, centralized aggregator instance on the backend, has global knowledge of all nodes in the network.
+It receives all the data from all \ttt instances and saves them in a time-series database for further evaluation.
+It also contains a presentation-layer through which users can view the data.
 
 When the local decision engine receives a packet, it both stores the data locally and also forwards it to the global aggregator, which periodically aggregates all the data from all the nodes and computes relevant benchmark values. 
-These are then distributed to all stations.
+These are then distributed to all interceptors.
 When generating a reply packet, the local decision engine performs a statistical evaluation of the respective treetalker's previous measurement data, and how it relates to the aggregator-supplied benchmark values.
 If it detects an anomaly, it may require the TreeTalker to rerun its measurements by sending a specially crafted command packet with a short sleep time.
 
 In order to make meaningful decisions, concept recognition is necessary.
-This is done by comparing a long-running, and short-running time-window of the data.
+This is done by comparing a long-running, and short-running time-window of the data.an
 It has been shown that the calculation of the twofold standard deviation for short-running windows is already sufficient to be able to make decisions - for example, whether a new measurement is necessary or these new values can be appointed as the new standard.
 In general, the preferred decision is to reduce the upcoming measurement interval in order to verify and increase the accuracy of the collected data.
-Due to the minor costs on battery and data transmission over Lora, even a 20\% increase in measurements is insignificant for the overall energy consumption. 
+Due to the minor costs on battery and data transmission over Lora, even a 20\% increase in measurements is insignificant for the overall energy consumption.
+
+If no anomaly is found, the sleep time until the next measurment is calculated based on the Treetalker's reported remaining battery capacity.
+This serves to maximise the device's lifetime under battery by reducing the measurement frequency during times when the pohtovoltaic-panel produces little energy, and increasing the frequency when there is a power surplus to increase resolution.
 
 \subsection{Evaluation}
 \label{sec:TreeTalker:evaluation}
